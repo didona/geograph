@@ -30,6 +30,7 @@
 require 'java'
 
 require File.join(Rails.root, 'lib', 'fenix', 'loader')
+require File.join(Rails.root, 'lib', 'ispn', 'loader')
 
 # Load the Cloud-TM Framework.
 CLOUDTM_PATH = File.join(Rails.root, 'lib', 'cloud_tm') unless defined?(CLOUDTM_PATH)
@@ -58,6 +59,8 @@ module CloudTm
           Fenix::Loader.init(options)
         when CloudTm::Config::Framework::OGM
           Ogm::Loader.init(options)
+        when CloudTm::Config::Framework::ISPN
+          Ispn::Loader.init(options)
         else
           raise "Cannot find CloudTM framework: #{options[:framework]}"
         end

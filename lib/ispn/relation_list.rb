@@ -27,15 +27,10 @@
 ###############################################################################
 ###############################################################################
 
-begin
-  require File.join(Rails.root, 'lib', 'cloud_tm', 'framework')
-
-  # loading the Fenix Framework
-  CloudTm::Framework.init(
-    :dml => 'geograph.dml',
-    :conf => 'infinispan-conf.xml',
-    :framework => CloudTm::Config::Framework::ISPN
-  )
-rescue Exception => ex
-  Rails.logger.error "Cannot load Cloud-TM Framework: #{ex}"
+module Fenix
+  class RelationList
+    def to_json
+      map(&:attributes_to_hash).to_json
+    end
+  end
 end

@@ -12,7 +12,7 @@
        <jmxStatistics enabled="true"/>
        <clustering mode="replication">
           <!--<hash numOwners="2" rehashRpcTimeout="120000"/>-->
-          <async/>
+          <sync/>
        </clustering>
     <!-- Default
          transactionManagerLookupClass="org.infinispan.transaction.lookup.GenericTransactionManagerLookup"
@@ -44,9 +44,9 @@
          method takes a lot of CPU when putting values under READ_COMMITTED!
          -->
     <locking isolationLevel="REPEATABLE_READ" writeSkewCheck="true" />
-
+      <!-- writeSkewCheck="true"-->
     <versioning versioningScheme="SIMPLE" enabled="true" />
-    <!--
+
     <loaders passivation="false" shared="false" preload="false">
       <loader class="org.infinispan.loaders.file.FileCacheStore"
            fetchPersistentState="true"
@@ -59,7 +59,7 @@
         </properties>
       </loader>
     </loaders>
-    -->
+
   </default>
 </infinispan>
 

@@ -94,7 +94,7 @@ module CloudTm
     class << self
 
       def find(oid)
-        _oid = oid.to_i
+        _oid = oid #Now ids are strings !! .to_i
         all.each do |geo_obj|
           return geo_obj if geo_obj.oid == _oid
         end

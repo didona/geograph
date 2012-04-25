@@ -45,7 +45,7 @@ module CloudTm
     class << self
 
       def find(oid)
-        _oid = oid.to_i
+        _oid = oid #now ids are strings .to_i
         all.each do |job|
           return job if job.oid == _oid
         end

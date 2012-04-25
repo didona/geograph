@@ -39,7 +39,7 @@ module CloudTm
     class << self
 
       def find(oid)
-        _oid = oid.to_i
+        _oid = oid #NOW IDS ARE STRINGS! .to_i
         all.each do |agent|
           return agent if agent.oid == _oid
         end

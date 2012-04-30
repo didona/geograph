@@ -7,3 +7,5 @@ sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "invoked"
 service jboss-as-standalone stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "jboss stopped"
 
 /etc/init.d/mysqld restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/usersdb" "mysql started"
+
+ nohup java -cp $JBOSS_HOME/modules/org/jgroups/main/jgroups-3.0.6.Final.jar org.jgroups.stack.GossipRouter&

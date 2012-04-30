@@ -32,7 +32,7 @@
          oob_thread_pool.rejection_policy="discard"
          />
    <TCPGOSSIP
-         initial_hosts="localhost[12001]"
+         initial_hosts="{GOSSIP_ROUTER_PLACEHOLDER}"
          num_initial_members="5"
          break_on_coord_rsp="true"
          return_entire_cache="true"

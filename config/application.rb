@@ -40,6 +40,25 @@ end
 
 module Geograph
   class Application < Rails::Application
+
+    config.after_initialize do
+      begin
+
+        #Configure jgroups to use the gossip router
+        #Note: The gossip router is in the users db
+        #Note2: This must be done after Geograph initializers
+        #FIXME!!!! #jgroups_conf_dir = File.join(Rails.root, "lib", "fenix", "conf")
+        # open the template file, replace the GOSSIP_ROUTER_PLACEHOLDER right value
+        #jgossip_address = "#{Madmass.install_options(:cluster_nodes)[:db_nodes].first}[12001]"
+        #File.open(File.join(jgroups_conf_dir, "jgroups.xml.template"), 'r') do |template|
+        #  jgroups_conf = template.read.gsub("{GOSSIP_ROUTER_PLACEHOLDER}", jgossip_address)
+        #  File.open(File.join(jgroups_conf_dir, "jgroups.xml"), 'w') do |original|
+        #    original.write jgroups_conf
+        #  end
+        end
+
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -47,33 +66,7 @@ module Geograph
     config.autoload_paths += Dir["#{config.root}/lib", "#{config.root}/lib/**/"]
     # config.autoload_paths += %W(#{config.root}/extras)
 
-    config.after_initialize do
-      begin
-        #FIXME: Move somewhere else and invoke here!
-        require File.join(Rails.root, 'lib', 'cloud_tm', 'framework')
-        #Configure jgroups to use the gossip router
-        #Note: The gossip router is in the users db
-        #Note2: This must be done after Geograph initializers
-        jgroups_conf_dir = File.join(Rails.root, "lib", "fenix", "conf")
-        # open the template file, replace the GOSSIP_ROUTER_PLACEHOLDER right value
-        jgossip_address = "#{Madmass.install_options(:cluster_nodes)[:db_nodes].first}[12001]"
-        File.open(File.join(jgroups_conf_dir, "jgroups.xml.template"), 'r') do |template|
-          jgroups_conf = template.read.gsub("{GOSSIP_ROUTER_PLACEHOLDER}", jgossip_address)
-          File.open(File.join(jgroups_conf_dir, "jgroups.xml"), 'w') do |original|
-            original.write jgroups_conf
-          end
-        end
 
-        # loading the Fenix Framework
-        CloudTm::Framework.init(
-          :dml => 'geograph.dml',
-          :conf => 'infinispan-conf.xml',
-          :framework => CloudTm::Config::Framework::ISPN
-        )
-      rescue Exception => ex
-        Rails.logger.error "Cannot load Cloud-TM Framework: #{ex}"
-      end
-    end
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
     # config.plugins = [ :exception_notification, :ssl_requirement, :all ]

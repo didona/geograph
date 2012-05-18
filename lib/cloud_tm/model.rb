@@ -40,6 +40,21 @@ module CloudTm
         CloudTm::TxSystem.getManager
       end
 
+      def where(options = {})
+        instances = []
+        all.each do |instance|
+          instances << instance if instance.has_properties?(options)
+        end
+        return instances
+      end
+
+      def all
+        manager = CloudTm::TxSystem.getManager
+        root = manager.getRoot
+        #  Madmass.logger.info("Root #{root.oid}")
+        return root.getAgents
+      end
+
       def create attrs = {}, &block
         instance = new
         attrs.each do |attr, value|
@@ -49,13 +64,20 @@ module CloudTm
         block.call(instance) if block_given?
         instance
       end
-    
+
     end
-    
+
     def update_attributes attrs = {}
       attrs.each do |property, value|
         send("#{property}=", value)
       end
+    end
+
+    def has_properties?(options)
+      options.each do |prop, value|
+        return false if send(prop) != value
+      end
+      true
     end
 
     private

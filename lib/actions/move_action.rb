@@ -34,7 +34,7 @@
 
 module Actions
   class MoveAction < Madmass::Action::Action
-    action_params :agent, :latitude, :longitude, :data
+    action_params :user, :latitude, :longitude, :data
     #action_states :none
     #next_state :none
 
@@ -48,9 +48,10 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
-      @agent = CloudTm::Agent.where(:user => @parameters[:agent][:id])
+      Madmass.logger.info("Executing move action with parameters #{@parameters.inspect}")
+      @agent = CloudTm::Agent.where(:user => @parameters[:user][:id]).first
       unless @agent
-        @agent = CloudTm::Agent.create :user => @parameters[:agent][:id]
+        @agent = CloudTm::Agent.create :user => @parameters[:user][:id]
       end
 
       has_geoobj = false

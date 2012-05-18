@@ -17,6 +17,7 @@ class GeoObject {
 
 class Agent {
   String status;
+  String user;
 }
 
 class Job {

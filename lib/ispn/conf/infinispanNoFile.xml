@@ -3,10 +3,9 @@
     <global>
         <globalJmxStatistics
                 enabled="true"
-                jmxDomain="it.geograph"
-                allowDuplicateDomains="true"/>
+                jmxDomain="org.infinispan"/>
         <transport
-                clusterName="geograph">
+                clusterName="infinispan-cluster">
             <properties>
                 <property
                         name="configurationFile"
@@ -25,9 +24,8 @@
                 enabled="true"/>
         <deadlockDetection
                 enabled="true"/>
-      <!--transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossStandaloneJTAManagerLookup"-->
         <transaction
-                transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossTransactionManagerLookup"
+                transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossStandaloneJTAManagerLookup"
                 useEagerLocking="false"
                 transactionMode="TRANSACTIONAL"
                 syncRollbackPhase="false"
@@ -42,7 +40,7 @@
             <sync
                     replTimeout="15000" />
             <stateTransfer
-                    fetchInMemoryState="true"
+                    fetchInMemoryState="false"
                     chunkSize="100"
                     timeout="240000"/>
         </clustering>

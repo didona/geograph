@@ -33,7 +33,7 @@
                 syncRollbackPhase="false"
                 cacheStopTimeout="30000"
                 useSynchronization="false"
-                syncCommitPhase="false"
+                syncCommitPhase="true"
                 lockingMode="OPTIMISTIC"
                 eagerLockSingleNode="false"
                 use1PcForAutoCommitTransactions="false"

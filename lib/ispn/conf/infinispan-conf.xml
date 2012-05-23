@@ -10,7 +10,7 @@
             <properties>
                 <property
                         name="configurationFile"
-                        value="jgroups/jgroups.xml" />
+                        value="jgroups/jgroups-udp.xml" />
             </properties>
         </transport>
     </global>

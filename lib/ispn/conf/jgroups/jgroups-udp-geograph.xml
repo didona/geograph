@@ -3,8 +3,8 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/JGroups-3.0.xsd">
    <UDP
-         mcast_addr="${jgroups.udp.mcast_addr:232.10.10.10}"
-         mcast_port="${jgroups.udp.mcast_port:45588}"
+         mcast_addr="${jgroups.udp.mcast_addr:232.9.9.9}"
+         mcast_port="${jgroups.udp.mcast_port:45587}"
          tos="8"
          ucast_recv_buf_size="20M"
          ucast_send_buf_size="640K"
@@ -49,9 +49,9 @@
          use_mcast_xmit="true"
          xmit_stagger_timeout="500"
          discard_delivered_msgs="true"/>
-   <UNICAST2
-         max_bytes="10M"
-         stable_interval="60000"
+   <UNICAST
+         max_retransmit_time="0"
+         conn_expiry_timeout="0"
          xmit_interval="1000"/>
    <pbcast.STABLE
          stability_delay="2000"

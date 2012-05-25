@@ -2,9 +2,9 @@
 # DO NOT EDIT MANUALLY 
 
         --- 
-#:ws_adapter: Madmass::Comm::SockySender
-:ws_adapter: Madmass::Comm::JmsSender
-:host: localhost
+:ws_adapter: Madmass::Comm::SockySender
+#:ws_adapter: Madmass::Comm::JmsSender
+:host: cloudtm.ist.utl.pt
 :port: "9090"
 :secure: "false"
 :secret: my_secret_key
@@ -12,8 +12,8 @@
 :ar: true
 :devise: true
 :torquebox: true
-#:ws_client: :socky
-:ws_client: :stilts
-:stomplet_host: localhost
-:stomplet_port: 8675
-:stomplet_topic: /madmass/domain
+:ws_client: :socky
+#:ws_client: :stilts
+#:stomplet_host: localhost
+#:stomplet_port: 8675
+#:stomplet_topic: /madmass/domain

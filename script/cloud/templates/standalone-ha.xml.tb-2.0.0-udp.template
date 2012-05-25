@@ -91,6 +91,9 @@
             <logger category='org.apache.tomcat.util.modeler'>
                 <level name='WARN'/>
             </logger>
+            <logger category='org.jgroups.protocols.UDP'>
+               <level name='ERROR'/>
+            </logger>
             <logger category='sun.rmi'>
                 <level name='WARN'/>
             </logger>

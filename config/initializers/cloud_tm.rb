@@ -32,7 +32,7 @@ begin
   # loading the Fenix Framework
   CloudTm::Framework.init(
     :dml => 'geograph.dml',
-    :conf => 'infinispan-conf.xml',
+    :conf => 'infinispan-udp-conf-geograph.xml',
     :framework => CloudTm::Config::Framework::ISPN
   )
 rescue Exception => ex

@@ -8,7 +8,7 @@ $JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geog
 
 /etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/agent-farm-mod-cluster" "stopped mysqld"
 
-su - torquebox -c "cd $AGENT_FARM_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy['/farm']" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/agent-farm-mod-cluster" "geograph deployed"
+su - torquebox -c "cd $AGENT_FARM_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy['/farm']" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "agent-farm deployed"
 
 service jboss-as-standalone restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/agent-farm-mod-cluster" "restarted torquebox"
 

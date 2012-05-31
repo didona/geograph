@@ -22,7 +22,6 @@
 /tmp
 /Gemfile.lock
 
-/config/database.yml
 
 #Capistrano
 

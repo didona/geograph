@@ -51,9 +51,9 @@ production:
   adapter: mysql
   xa: false
   database: agentfarm_production
-  host: 10.100.0.1
-  username: geograph
-  password: geograph_passwd
+  host: localhost
+  username: root
+  password: geograph
   encoding: utf8
 
 

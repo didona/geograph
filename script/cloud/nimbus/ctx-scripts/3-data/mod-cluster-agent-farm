@@ -1,3 +1,7 @@
+###########
+# TO REMOVE
+###########
+
 #!/bin/bash
 source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
 sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/mod-cluster" "invoked"

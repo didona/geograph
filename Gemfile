@@ -42,7 +42,7 @@ gem "activerecord-jdbc-adapter"
 gem "jdbc-sqlite3"
 
 
-gem "devise"
+gem "devise", '< 2.0.0'
 
 gem "madmass",  :git => "git://github.com/algorithmica/madmass.git"
 #gem "madmass", :path => "~/dev/madmass"

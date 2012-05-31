@@ -72,7 +72,7 @@
     <profile>
         <subsystem xmlns='urn:jboss:domain:logging:1.1'>
             <console-handler name='CONSOLE'>
-                <level name='INFO'/>
+                <level name='TRACE'/>
                 <formatter>
                     <pattern-formatter pattern='%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%E%n'/>
                 </formatter>
@@ -99,6 +99,9 @@
             </logger>
             <logger category='jacorb.config'>
                 <level name='ERROR'/>
+            </logger>
+            <logger category="org.cloudtm.framework.ispn.IspnTxManager">
+                 <level name="INFO"/>
             </logger>
             <root-logger>
                 <level name='INFO'/>

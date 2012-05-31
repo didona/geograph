@@ -1,13 +1,28 @@
 #!/bin/bash
 source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
-sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph-mod-cluster" "invoked geograph app server script"
 
-$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph-mod-cluster" "setted host"
+sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "invoked geograph app server script"
 
-/opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph-mod-cluster" "stopped mod_cluster"
+#Set configuration files
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_rhq_host.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "setted rhq host"
 
-/etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph-mod-cluster" "stopped mysqld"
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "setted host"
 
-su - torquebox -c "cd $GEOGRAPH_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph-mod-cluster" "geograph deployed"
+#Make sure usless stuff is shut down
+/opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "stopped mod_cluster"
 
-service jboss-as-standalone restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "4-restarts/geograph-mod-cluster" "restarted torquebox"
+/etc/init.d/mysqld stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "stopped mysqld"
+
+#Start Torquebox
+
+service jboss-as-standalone restart && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "restarted torquebox"
+
+sleep 20
+
+#Deploy geograph
+su - torquebox -c "cd $GEOGRAPH_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/geograph" "geograph deployed"
+
+sleep 20
+
+#Start rhq agent
+su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/start_agent.sh&"

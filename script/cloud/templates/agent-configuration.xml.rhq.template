@@ -94,7 +94,7 @@ commands named "config", "setconfig" and "setup" and the command line options
                this if the agent platform's FQDN cannot be reliably determined
                at runtime.
                -->
-               <entry key="rhq.agent.name" value="vm47"/>
+               <entry key="rhq.agent.name" value="{THIS_HOST}"/>
 
                <!--
                _______________________________________________________________
@@ -921,7 +921,7 @@ commands named "config", "setconfig" and "setup" and the command line options
                <entry key="rhq.communications.connector.rhqtype"          value="agent" />
                <entry key="rhq.communications.connector.transport"        value="socket" />
                <entry key="rhq.communications.connector.bind-port"        value="16163" />
-               <entry key="rhq.communications.connector.bind-address"     value="{THIS_HOST}}" />
+               <entry key="rhq.communications.connector.bind-address"     value="{THIS_HOST}" />
                <!--<entry key="rhq.communications.connector.transport-params" value="serverBindAddress=193.136.128.84&amp;serverBindPort=16163&amp;numAcceptThreads=3&amp;maxPoolSize=303&amp;clientMaxPoolSize=304&amp;socketTimeout=60000&amp;enableTcpNoDelay=true&amp;backlog=200" />
                <entry key="rhq.communications.connector.lease-period"     value="5000" />
 -->

@@ -25,4 +25,4 @@ su - torquebox -c "cd $GEOGRAPH_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jru
 sleep 20
 
 #Start rhq agent
-su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/start_agent.sh&"
+su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/rhq-agent.sh --cleanconfig&"

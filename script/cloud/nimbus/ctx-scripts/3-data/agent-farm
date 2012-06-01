@@ -23,7 +23,7 @@ su - torquebox -c "cd $AGENT_FARM_HOME && RAILS_ENV=production $JRUBY_HOME/bin/j
 
 sleep 20
 
-su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/start_agent.sh&"
+su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/rhq-agent.sh --cleanconfig&"
 
 
 

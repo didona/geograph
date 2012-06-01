@@ -6,9 +6,11 @@ source /opt/apps/geograph/current/script/cloud/nimbus/set_app_env.sh
 
 sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "invoked agent-farm app server script"
 
+$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_jboss_conf.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted jboss conf"
+
 $JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_rhq_host.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted rhq host"
 
-$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph-agent-farm" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted host"
+#$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph-agent-farm" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted host"
 
 /opt/jboss/httpd/sbin/apachectl stop && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "stopped mod_cluster"
 

@@ -60,7 +60,7 @@ else
    echo "JAVA_OPTS already set in environment; overriding default settings with values: $JAVA_OPTS"
 fi
 
-JAVA_OPTS="$JAVA_OPTS -Dlog4j.logger.org.cloudtm.framework.ispn.IspnTxManager=TRACE"
+#JAVA_OPTS="$JAVA_OPTS -Dlog4j.logger.org.cloudtm.framework.ispn.IspnTxManager=TRACE"
 # Sample JPDA settings for remote socket debugging
 #JAVA_OPTS="$JAVA_OPTS -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n"
 

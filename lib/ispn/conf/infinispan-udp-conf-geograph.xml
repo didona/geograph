@@ -56,6 +56,14 @@
     <versioning
             enabled="true"
             versioningScheme="SIMPLE"/>
+    <customInterceptors>
+      <interceptor
+              after="org.infinispan.interceptors.InvocationContextInterceptor"
+              class="org.infinispan.distribution.wrappers.ReplCustomStatsInterceptor"/>
+      <interceptor
+              before="org.infinispan.interceptors.NotificationInterceptor"
+              class="org.infinispan.stats.topK.StreamLibInterceptor"/>
+    </customInterceptors>
   </default>
 </infinispan>
 

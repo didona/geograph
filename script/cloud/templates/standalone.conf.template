@@ -43,22 +43,22 @@ fi
 #
 #PRESERVE_JAVA_OPTS=true
 
-#
-# Specify options to pass to the Java VM.
-#
-if [ "x$JAVA_OPTS" = "x" ]; then
-   JAVA_OPTS="-Xms8192m -Xmx8192m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
-   JAVA_OPTS="$JAVA_OPTS -Djboss.modules.system.pkgs=$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true"
-   JAVA_OPTS="$JAVA_OPTS -Djboss.server.default.config=standalone-ha.xml"
-   JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.management={THIS_IP}"
-   JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address={THIS_IP}"
-   JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.unsecure={THIS_IP}"
-   #JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=6996"
-   #JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
-   #JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
-else
-   echo "JAVA_OPTS already set in environment; overriding default settings with values: $JAVA_OPTS"
-fi
+  #
+  # Specify options to pass to the Java VM.
+  #
+  if [ "x$JAVA_OPTS" = "x" ]; then
+     JAVA_OPTS="-Xms8192m -Xmx8192m -XX:MaxPermSize=256m -Djava.net.preferIPv4Stack=true -Dorg.jboss.resolver.warning=true -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"
+     JAVA_OPTS="$JAVA_OPTS -Djboss.modules.system.pkgs=$JBOSS_MODULES_SYSTEM_PKGS -Djava.awt.headless=true"
+     JAVA_OPTS="$JAVA_OPTS -Djboss.server.default.config=standalone-ha.xml"
+     JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.management={THIS_IP}"
+     JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address={THIS_IP}"
+     JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address.unsecure={THIS_IP}"
+     #JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.port=6996"
+     #JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.ssl=false"
+     #JAVA_OPTS="$JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false"
+  else
+     echo "JAVA_OPTS already set in environment; overriding default settings with values: $JAVA_OPTS"
+  fi
 
 #JAVA_OPTS="$JAVA_OPTS -Dlog4j.logger.org.cloudtm.framework.ispn.IspnTxManager=TRACE"
 # Sample JPDA settings for remote socket debugging

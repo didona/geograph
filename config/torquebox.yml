@@ -10,6 +10,7 @@ topics:
 
 queues:
   /queue/commands:
+    durable: false
 
 #jobs:
 #  edges.processor:

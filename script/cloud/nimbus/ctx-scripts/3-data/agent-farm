@@ -25,10 +25,13 @@ su - torquebox -c "cd $AGENT_FARM_HOME && RAILS_ENV=production $JRUBY_HOME/bin/j
 
 sleep 20
 
-su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/rhq-agent.sh --cleanconfig&"
+#Start rhq agent
+#su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/rhq-agent.sh --cleanconfig&"
 
 
 
+#start wpm
+cd /opt/wpm; ./run_cons_prod.sh; cd -
 
 
 

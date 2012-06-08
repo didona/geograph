@@ -3,7 +3,7 @@
 messaging:
   /queue/commands:
     Madmass::Agent::JmsExecutor:
-      concurrency: 500
+      concurrency: 16
 
 topics:
   /topic/perceptions:

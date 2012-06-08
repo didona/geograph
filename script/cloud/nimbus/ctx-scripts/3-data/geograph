@@ -31,4 +31,4 @@ sleep 20
 #su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/rhq-agent.sh --cleanconfig&"
 
 #start wpm
-cd /opt/wpm; ./run_cons_prod.sh; cd -
+su - torquebox -c "cd /opt/wpm; ./run_cons_prod.sh; cd -"

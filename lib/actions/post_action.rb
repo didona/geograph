@@ -34,7 +34,7 @@
 
 
 class Actions::PostAction < Madmass::Action::Action
-  action_params :latitude, :longitude, :geo_agent, :data
+  action_params :latitude, :longitude, :data, :user
   #action_states :none
   #next_state :none
 
@@ -50,11 +50,11 @@ class Actions::PostAction < Madmass::Action::Action
   # the action effects.
   def execute
     # search if the agent related to all geo referenced posts (geo objects) exists
-    @agent = CloudTm::Agent.find(@parameters[:geo_agent])
+    @agent = CloudTm::Agent.where(:user => @parameters[:user][:id]).first
     unless @agent
-      # create the agent if it does not exists
-      @agent = CloudTm::Agent.create
+      @agent = CloudTm::Agent.create :user => @parameters[:user][:id]
     end
+
     @geo_post = CloudTm::GeoObject.create
     @geo_post.update_attributes(
       :latitude => java.math.BigDecimal.new(@parameters[:latitude]),

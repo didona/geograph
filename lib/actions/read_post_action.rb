@@ -55,7 +55,7 @@ class Actions::ReadPostAction < Madmass::Action::Action
     @posts_read = []
     CloudTm::GeoObject.all.each do |post_obj|
       next if post_obj.type != "BloggerAgent"
-      if HaversineDistance.calculate(geo_object, post_obj) <= @enabled_job.distance
+      if HaversineDistance.calculate(geo_object, post_obj) <= 2000 #FIXME @enabled_job.distance
         @posts_read << post_obj
       end
     end
@@ -84,14 +84,14 @@ class Actions::ReadPostAction < Madmass::Action::Action
   # [OPTIONAL] - The default implementation returns always true
   # Override this method in your action to define when the action is
   # applicable (i.e. to verify the action preconditions).
-  def applicable?
-    @enabled_job = CloudTm::Job.all.detect do |job|
-      job.enabled
-    end
-    unless @enabled_job
-      why_not_applicable.add(:'no-processor-configured', 'Posts cannot be read without a Edge Processor configured')
-    end
-    return why_not_applicable.empty?
-  end
+  #def applicable?
+  #  @enabled_job = CloudTm::Job.all.detect do |job|
+  #    job.enabled
+  #  end
+  #  unless @enabled_job
+  #    why_not_applicable.add(:'no-processor-configured', 'Posts cannot be read without a Edge Processor configured')
+  #  end
+  #  return why_not_applicable.empty?
+  #end
 
 end

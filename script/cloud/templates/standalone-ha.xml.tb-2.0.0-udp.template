@@ -323,7 +323,7 @@
                     true
                 </clustered>
                 <persistence-enabled>
-                    true
+                    false
                 </persistence-enabled>
                 <journal-file-size>
                     102400

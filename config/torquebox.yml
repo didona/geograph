@@ -3,7 +3,7 @@
 messaging:
   /queue/commands:
     Madmass::Agent::JmsExecutor:
-      concurrency: 16
+      concurrency: 8
 
 topics:
   /topic/perceptions:
@@ -31,7 +31,7 @@ queues:
 
 tasks:
   Backgroundable:
-    concurrency: 500
+    concurrency: 8
 
 pooling:
   messaging: shared

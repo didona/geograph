@@ -31,6 +31,7 @@ class HomeController < ApplicationController
   before_filter :authenticate_agent
   include Madmass::Transaction::TxMonitor
   around_filter :transact
+  respond_to :html, :js
   
   def index
     @geo_objects = CloudTm::GeoObject.all.to_json

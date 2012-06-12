@@ -1,15 +1,43 @@
 <%= register_websocket(:channels => ["all"], :client => current_user.id) %>
 
 <h1 style="text-align: center;">GeoGraph Monitor</h1>
+
+<div id="refresh-container">
+  <%= button_tag "start refresh", :id => 'refresh-button', :onclick => "switchRefresh();" %>
+</div>
+
 <div id="map_canvas" style="width:1024px; height:768px; margin: 0 auto;"></div>
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCXQO2oj9QzIl0RGXzDCO-JTa2j--FbVNg&sensor=true"></script>
 <script type="text/javascript">
+
+
+  var refreshEnabled = false;
+  var refreshInterval = null;
+
+  function switchRefresh() {
+    var buttonText = "stop refresh";
+    if(refreshEnabled) {
+      clearInterval(refreshInterval);
+      buttonText = "start refresh";
+    } else {
+      refreshInterval = setInterval(refreshMap, 5000);
+    }
+    refreshEnabled = !refreshEnabled;
+    $("#refresh-button span").html(buttonText);
+  }
+
+  function refreshMap() {
+    $.ajax({url: 'map', dataType: 'script'});
+  }
+
   var map = null;
-  var markers = {};
+  var markers = new Hash();
   var infoWindows = {};
-  var geoObjects = [];
-  var mapEdges = {};
+  var currentGeoObjects = [];
+  var currentEdges = [];
+  var currentCycle = 0;
+  var mapEdges = new Hash();
   var mapCenterLat = 41.9;
   var mapCenterLng = 12.4;
   var infoWindowTemplate = '<div id="content-{GEOOBJECTID}"><h2 id="content-heading-{GEOOBJECTID}">{GEOOBJECTTYPE}</h2><div id="body-content-{GEOOBJECTID}">{GEOOBJECTDATA}</div></div>';
@@ -96,6 +124,14 @@
     });
   }
 
+  function destroyAllGeoObjects() {
+    markers.each(function(value, key) {
+      value.setMap(null);
+      value = null;
+    });
+    markers = new Hash();
+  }
+
   function onPercept(perception) {
     var geoObject = perception["data"];
 
@@ -174,7 +210,7 @@
 
   function removeEdge(edge) {
     var edgeIdx = edgeIndex(edge);
-    if(mapEdges[edgeIdx] == null) return;
+    if(mapEdges[edgeIdx] == undefined) return;
     mapEdges[edgeIdx].each(function(mEdge) {
       mEdge.setMap(null);
       mEdge = null;
@@ -198,15 +234,47 @@
   }
 
 
+  function refreshEdges(freshEdges) {
+    removeAllEdges();
+    freshEdges.each(function(edge){
+      addEdge(edge);
+    });
+  }
+
+  <%#*function refresEdgesBetter(freshEdges) {%>
+    <%#*freshEdges.each(function(edge) {%>
+      <%#*var existingEdge = mapEdges[edgeIndex(edge)];%>
+      <%#*// if the edge exists update its position if changed%>
+      <%#*if(existingEdge != undefined) {%>
+
+        <%#*removeEdge(edge);%>
+        <%#*addEdge(edge);%>
+      <%#*} else {%>
+        <%#*// if the edge don't exists create it%>
+        <%#*addEdge(edge);%>
+      <%#*}%>
+    <%#*});%>
+    <%#*currentCycle++;%>
+  <%#*}%>
+
+  function refreshGeoObjects(freshGeoObjects) {
+    destroyAllGeoObjects();
+    freshGeoObjects.each(function(geoObject){
+      addGeoObject(geoObject);
+    });
+  }
+
   $(document).ready(function() {
+    $("#refresh-button").button();
+    
     initializeMap();
-    geoObjects = <%= @geo_objects.html_safe %>;
-    geoObjects.each(function(geoObject){
+    currentGeoObjects = <%= @geo_objects.html_safe %>;
+    currentGeoObjects.each(function(geoObject){
       addGeoObject(geoObject);
     });
 
-    edges = <%= @edges.html_safe %>;
-    edges.each(function(edge){
+    currentEdges = <%= @edges.html_safe %>;
+    currentEdges.each(function(edge){
       addEdge(edge);
     });
   });

@@ -41,7 +41,8 @@ module Actions
     # [OPTIONAL]  Add your initialization code here.
     def initialize params
       super
-      @channels << :all
+      # uncomment this to communicate via web sockets
+      #@channels << :all
     end
 
 

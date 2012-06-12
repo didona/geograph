@@ -42,7 +42,8 @@ class Actions::PostAction < Madmass::Action::Action
   def initialize params
     super
     @geo_post = nil
-    @channels << :all
+    # uncomment this to communicate via web sockets
+    #@channels << :all
   end
 
 

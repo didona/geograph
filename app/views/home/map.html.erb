@@ -204,6 +204,11 @@
     geoObjects.each(function(geoObject){
       addGeoObject(geoObject);
     });
+
+    edges = <%= @edges.html_safe %>;
+    edges.each(function(edge){
+      addEdge(edge);
+    });
   });
 </script>
 

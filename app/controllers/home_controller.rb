@@ -37,7 +37,9 @@ class HomeController < ApplicationController
   end
 
   def map
-    @geo_objects = CloudTm::GeoObject.all.to_json
+    geo_objects_in_cache = CloudTm::GeoObject.all
+    @geo_objects = geo_objects_in_cache.to_json
+    @edges = geo_objects_in_cache.map(&:edges_for_percept).flatten.to_json
   end
 
   private

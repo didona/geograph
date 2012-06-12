@@ -44,8 +44,7 @@ $CLASSPATH << ISPN_CONF_PATH
 
 module Ispn
   Config                  = Java::PtIstFenixframework::Config
-  #RelationList            = Java::PtIstFenixframeworkPstm::RelationList
-  #FenixTransactionManager = Java::OrgCloudtmFrameworkFenix::FFTxManager
+  RelationSet            = Java::OrgCloudtmFrameworkIspn::RelationSet
   
   # This is the Fenix Framework loader. It provides a simple way to
   # run the framework initialization process.

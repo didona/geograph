@@ -52,6 +52,7 @@ class Actions::PostAction < Madmass::Action::Action
     # search if the agent related to all geo referenced posts (geo objects) exists
     @agent = CloudTm::Agent.where(:user => @parameters[:user][:id]).first
     unless @agent
+      Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")
       @agent = CloudTm::Agent.create :user => @parameters[:user][:id]
     end
 

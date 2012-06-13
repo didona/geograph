@@ -53,10 +53,15 @@ class Actions::ReadPostAction < Madmass::Action::Action
     geo_object.longitude = java.math.BigDecimal.new(@parameters[:longitude])
 
     @posts_read = []
+      @enabled_job = CloudTm::Job.all.detect do |job|
+       job.enabled
+    end
+    dist = @enabled_job ? @enabled_job.distance : 850
     CloudTm::GeoObject.all.each do |post_obj|
       next if post_obj.type != "BloggerAgent"
-      if HaversineDistance.calculate(geo_object, post_obj) <= 2000 #FIXME @enabled_job.distance
+      if HaversineDistance.calculate(geo_object, post_obj) <= dist #FIXME @enabled_job.distance
         @posts_read << post_obj
+        break
       end
     end
   end

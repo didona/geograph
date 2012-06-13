@@ -103,6 +103,9 @@
             <logger category='jacorb.config'>
                 <level name='ERROR'/>
             </logger>
+            <logger category="org.infinispan.loaders.file.FileCacheStore">
+              <level name="ERROR"/>
+            </logger>
            <logger category="org.cloudtm.framework.ispn.IspnTxManager">
                  <level name="INFO"/>
             </logger>

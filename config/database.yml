@@ -16,7 +16,7 @@ development:
   database: geograph_development
   pool: 100
   username: root
-  password: geograph
+  password: hokuto
   driver: com.mysql.jdbc.Driver
   url: jdbc:mysql://localhost:3306/geograph_development
 
@@ -30,10 +30,10 @@ test:
 production:
   adapter: mysql
   xa: false
-  database: agentfarm_production
-  host: 10.100.0.1
-  username: geograph
-  password: geograph_passwd
+  database: geograph_development
+  host: localhost
+  username: root
+  password: hokuto
   encoding: utf8
 
 

@@ -31,6 +31,7 @@ require 'java'
 
 require File.join(Rails.root, 'lib', 'fenix', 'loader')
 require File.join(Rails.root, 'lib', 'ispn', 'loader')
+require File.join(Rails.root, 'lib', 'ogm', 'loader')
 
 # Load the Cloud-TM Framework.
 CLOUDTM_PATH = File.join(Rails.root, 'lib', 'cloud_tm') unless defined?(CLOUDTM_PATH)

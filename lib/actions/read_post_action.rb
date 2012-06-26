@@ -34,7 +34,7 @@ require 'haversine_distance'
 
 
 class Actions::ReadPostAction < Madmass::Action::Action
-  action_params :latitude, :longitude
+  action_params :latitude, :longitude, :user
   #action_states :none
   #next_state :none
 
@@ -61,7 +61,7 @@ class Actions::ReadPostAction < Madmass::Action::Action
       next if post_obj.type != "BloggerAgent"
       if HaversineDistance.calculate(geo_object, post_obj) <= dist #FIXME @enabled_job.distance
         @posts_read << post_obj
-        break
+        break #read just one post
       end
     end
   end

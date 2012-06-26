@@ -14,8 +14,10 @@
       </properties>
     </transport>
   </global>
+
   <default>
-    <!-- <locking
+
+  <!-- <locking
    isolationLevel="REPEATABLE_READ"
    concurrencyLevel="32"
    writeSkewCheck="true"
@@ -28,10 +30,13 @@
             writeSkewCheck="true"
             useLockStriping="false"
             lockAcquisitionTimeout="10000"/>
+
     <jmxStatistics
             enabled="true"/>
+
     <deadlockDetection
             enabled="true"/>
+
     <!--transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossStandaloneJTAManagerLookup"-->
     <transaction
             transactionManagerLookupClass="org.infinispan.transaction.lookup.JBossTransactionManagerLookup"
@@ -45,6 +50,7 @@
             eagerLockSingleNode="false"
             use1PcForAutoCommitTransactions="false"
             autoCommit="true"/>
+
     <clustering mode="r">
       <sync
               replTimeout="15000"/>
@@ -53,9 +59,11 @@
               chunkSize="100"
               timeout="240000"/>
     </clustering>
+
     <versioning
             enabled="true"
             versioningScheme="SIMPLE"/>
+
     <customInterceptors>
       <interceptor
               after="org.infinispan.interceptors.InvocationContextInterceptor"
@@ -64,6 +72,7 @@
               before="org.infinispan.interceptors.NotificationInterceptor"
               class="org.infinispan.stats.topK.StreamLibInterceptor"/>
     </customInterceptors>
+
   </default>
 </infinispan>
 

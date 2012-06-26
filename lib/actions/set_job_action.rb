@@ -34,7 +34,7 @@
 
 module Actions
   class SetJobAction < Madmass::Action::Action
-    action_params :name, :enabled, :distance
+    action_params :name,  :distance
     #action_states :none
     #next_state :none
 

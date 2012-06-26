@@ -4,10 +4,10 @@
         --- 
 :ws_adapter: Madmass::Comm::SockySender
 #:ws_adapter: Madmass::Comm::JmsSender
-:host: cloudtm.ist.utl.pt
+:host: localhost
 :port: "9090"
 :secure: "false"
-:secret: my_secret_key
+#:secret: my_secret_key
 :db: true
 :ar: true
 :devise: true

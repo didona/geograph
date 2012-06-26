@@ -41,24 +41,6 @@ end
 module Geograph
   class Application < Rails::Application
 
-    config.after_initialize do
-      begin
-
-        #Configure jgroups to use the gossip router
-        #Note: The gossip router is in the users db
-        #Note2: This must be done after Geograph initializers
-        #FIXME!!!! #jgroups_conf_dir = File.join(Rails.root, "lib", "fenix", "conf")
-        # open the template file, replace the GOSSIP_ROUTER_PLACEHOLDER right value
-        #jgossip_address = "#{Madmass.install_options(:cluster_nodes)[:db_nodes].first}[12001]"
-        #File.open(File.join(jgroups_conf_dir, "jgroups.xml.template"), 'r') do |template|
-        #  jgroups_conf = template.read.gsub("{GOSSIP_ROUTER_PLACEHOLDER}", jgossip_address)
-        #  File.open(File.join(jgroups_conf_dir, "jgroups.xml"), 'w') do |original|
-        #    original.write jgroups_conf
-        #  end
-        end
-
-    end
-
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
@@ -84,6 +66,9 @@ module Geograph
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = "utf-8"
+
+    #Available levels :debug, :info, :warn, :error, and :fatal
+    config.log_level = :error
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]

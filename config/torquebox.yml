@@ -1,9 +1,13 @@
-
-
 messaging:
   /queue/commands:
     Madmass::Agent::JmsExecutor:
-      concurrency: 8
+      selector: "perception IS NULL AND ((synchronous IS NULL) OR (synchronous <> 'true'))"
+      concurrency: 1
+    Madmass::Agent::SyncJmsExecutor:
+      selector: "perception IS NULL AND synchronous = 'true'"
+      concurrency: 1
+
+#
 
 topics:
   /topic/perceptions:

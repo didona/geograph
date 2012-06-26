@@ -1,5 +1,5 @@
 :hosts:
-  - :host: cloudtm.ist.utl.pt
+  - :host: localhost
     :port: 9090
-    :secret: my_secret_key
+    #:secret: my_secret_key
     :secure: false

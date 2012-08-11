@@ -33,8 +33,8 @@
 # that is briefly described in the Madmass::Action::Action class.
 
 module Actions
-  class MoveAction < Madmass::Action::Action
-    action_params :user, :latitude, :longitude, :data
+  class RegisterAgentAction < Madmass::Action::Action
+    action_params :user
     #action_states :none
     #next_state :none
 
@@ -49,31 +49,11 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
-      Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
-
-
-      @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
-
-
-      has_geoobj = false
-      if @agent.hasAnyGeoObjects
-        @geo_object = @agent.getGeoObjects.first
-        has_geoobj = true
-      else
-        @geo_object = CloudTm::GeoObject.create
-      end
-
-      @geo_object.update_attributes(
-        :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
-        :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
-        :body => @parameters[:data][:body],
-        :type => @parameters[:data][:type]
-      )
-
-      @agent.addGeoObjects(@geo_object) unless has_geoobj
-
-      if edges_enabled?
-        @geo_object.renew_edges(@job.distance)
+      #Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
+      @agent = CloudTm::Agent.where(:user => @parameters[:user][:id]).first
+      unless @agent
+        Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")
+        @agent = CloudTm::Agent.create :user => @parameters[:user][:id]
       end
     end
 
@@ -81,21 +61,7 @@ module Actions
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.data = {
-        :geo_agent => @agent.oid,
-        :geo_object => {
-          :id => @geo_object.oid,
-          :latitude => @geo_object.latitude.to_s,
-          :longitude => @geo_object.longitude.to_s,
-          :data => {:body => @geo_object.body, :type => @geo_object.type}
-        }
-      }
-
-      if edges_enabled?
-        p.data[:edges] = @geo_object.edges_for_percept
-      end
-
-      Madmass.current_perception = []
+      p.data = {:agent_id => @agent.oid}
       Madmass.current_perception << p
     end
 
@@ -118,12 +84,6 @@ module Actions
 
     private
 
-    def edges_enabled?
-      jobs = CloudTm::Job.where(:name => 'action')
-      return false if jobs.empty?
-      @job = jobs.first
-      return @job.enabled?
-    end
 
   end
 

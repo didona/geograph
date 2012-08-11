@@ -48,6 +48,10 @@ class Actions::ReadPostAction < Madmass::Action::Action
   # [MANDATORY] Override this method in your action to define
   # the action effects.
   def execute
+
+
+    #@agent = CloudTm::Agent.find_by_user(:user => @parameters[:user][:id])
+
     geo_object = CloudTm::GeoObject.new
     geo_object.latitude = java.math.BigDecimal.new(@parameters[:latitude])
     geo_object.longitude = java.math.BigDecimal.new(@parameters[:longitude])
@@ -81,7 +85,6 @@ class Actions::ReadPostAction < Madmass::Action::Action
       }
     end
 
-    Madmass.current_perception = []
     Madmass.current_perception << p
   end
 

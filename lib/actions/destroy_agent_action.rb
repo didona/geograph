@@ -27,48 +27,44 @@
 ###############################################################################
 ###############################################################################
 
-module CloudTm
-  class Agent
-    include Madmass::Agent::Executor
-    include CloudTm::Model
 
-    def destroy
-      manager.getRoot.removeAgents(self)
+# This file is the implementation of the  CreateAction.
+# The implementation must comply with the action definition pattern
+# that is briefly described in the Madmass::Action::Action class.
+
+module Actions
+  class DestroyAgentAction < Madmass::Action::Action
+    action_params :user
+
+    def initialize params
+      super
     end
 
-    class << self
-
-      def find_by_user(uid)
-        agent = CloudTm::Agent.where(:user => uid).first
-
-        until agent
-          Madmass.logger.warn "Agent for user #{uid} not found! Retrying."
-          java.util.sleep(50)
-          agent = CloudTm::Agent.where(:user => uid).first
+    # [MANDATORY] Override this method in your action to define
+    # the action effects.
+    def execute
+      agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
+      if agent
+        #destroy geo-objects
+        if agent.hasAnyGeoObjects
+          agent.getGeoObjects.each do |o|
+            o.destroy
+          end
         end
-        agent
+        #destroy agent
+        agent.destroy
       end
-
-      def find(oid)
-        _oid = oid #NOW IDS ARE STRINGS! .to_i
-        all.each do |agent|
-          return agent if agent.oid == _oid
-        end
-        return nil
-      end
-
-      def create_with_root attrs = {}, &block
-        create_without_root(attrs) do |instance|
-          instance.set_root manager.getRoot
-        end
-      end
-
-      alias_method_chain :create, :root
-
-      def all
-        manager.getRoot.getAgents
-      end
-
     end
+
+    # [MANDATORY] Override this method in your action to define
+    # the perception content.
+    def build_result
+      p = Madmass::Perception::Percept.new(self)
+      #p.add_headers({:topics => ['all']}) #who must receive the percept
+      #p.data =  {}
+      Madmass.current_perception << p
+    end
+
   end
-end 
+
+end

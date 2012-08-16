@@ -54,18 +54,19 @@ class Actions::PostAction < Madmass::Action::Action
 
     @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
 
-    @geo_post = CloudTm::GeoObject.create
+    @geo_post = CloudTm::Post.create
     @geo_post.update_attributes(
       :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
       :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
-      :body => @parameters[:data][:body],
+      #:body => @parameters[:data][:body],
+      :text => "Some random text for this post ...",
       :type => @parameters[:data][:type]
     )
-    @agent.addGeoObjects(@geo_post)
+    @agent.addPosts(@geo_post)
 
-    if edges_enabled?
-      @geo_post.renew_edges(@job.distance)
-    end
+    #FIXME if edges_enabled?
+    #  @geo_post.renew_edges(@job.distance)
+    #end
   end
 
   # [MANDATORY] Override this method in your action to define
@@ -78,13 +79,13 @@ class Actions::PostAction < Madmass::Action::Action
         :id => @geo_post.oid,
         :latitude => @geo_post.latitude.to_s,
         :longitude => @geo_post.longitude.to_s,
-        :data => {:body => @geo_post.body, :type => @geo_post.type}
+        :data => {:body => " FIXME body", :type => @geo_post.type}
       }
     }
 
-    if edges_enabled?
-      p.data[:edges] = @geo_post.edges_for_percept
-    end
+    #FIXME if edges_enabled?
+    #  p.data[:edges] = @geo_post.edges_for_percept
+    #end
 
     Madmass.current_perception = []
     Madmass.current_perception << p

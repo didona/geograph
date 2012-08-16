@@ -55,26 +55,27 @@ module Actions
       @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
 
 
-      has_geoobj = false
-      if @agent.hasAnyGeoObjects
-        @geo_object = @agent.getGeoObjects.first
-        has_geoobj = true
-      else
-        @geo_object = CloudTm::GeoObject.create
-      end
+      #has_geoobj = false
+      #if @agent.hasAnyGeoObjects
+      #  @geo_object = @agent.getGeoObjects.first
+      #  has_geoobj = true
+      #else
+      #  @geo_object = CloudTm::GeoObject.create
+      #end
 
-      @geo_object.update_attributes(
+      @agent.update_attributes(
         :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
         :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
-        :body => @parameters[:data][:body],
+        #:body => @parameters[:data][:body],
         :type => @parameters[:data][:type]
       )
 
-      @agent.addGeoObjects(@geo_object) unless has_geoobj
+      #@agent.addGeoObjects(@geo_object) unless has_geoobj
 
-      if edges_enabled?
-        @geo_object.renew_edges(@job.distance)
-      end
+      #FIXME
+      #if edges_enabled?
+      #  @geo_object.renew_edges(@job.distance)
+      #end
     end
 
     # [MANDATORY] Override this method in your action to define
@@ -83,17 +84,18 @@ module Actions
       p = Madmass::Perception::Percept.new(self)
       p.data = {
         :geo_agent => @agent.oid,
+        #FIXME
         :geo_object => {
-          :id => @geo_object.oid,
-          :latitude => @geo_object.latitude.to_s,
-          :longitude => @geo_object.longitude.to_s,
-          :data => {:body => @geo_object.body, :type => @geo_object.type}
+          :id => @agent.oid, #FIXME
+          :latitude => @agent.latitude.to_s,
+          :longitude => @agent.longitude.to_s,
+          :data => {:body => "FIXME", :type => @agent.type}
         }
       }
 
-      if edges_enabled?
-        p.data[:edges] = @geo_object.edges_for_percept
-      end
+     #FIXME if edges_enabled?
+     #   p.data[:edges] = @geo_object.edges_for_percept
+     # end
 
       Madmass.current_perception = []
       Madmass.current_perception << p

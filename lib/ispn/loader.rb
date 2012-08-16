@@ -57,14 +57,16 @@ module Ispn
       # => root: the root class
       def init(options)
         config = Ispn::Config.new
+        Madmass.logger.debug "[Ispn] New Config #{config.inspect}"
         config.init(
           #:domainModelPath => File.join(ISPN_CONF_PATH, options[:dml]),
           :dbAlias => File.join(ISPN_CONF_PATH, options[:conf]) #,
           #:rootClass => options[:root] || DomainRoot.java_class,
           #:repositoryType => Fenix::Config::RepositoryType::INFINISPAN
         )
-
+        Madmass.logger.debug "[Ispn] Initializing Config #{config.inspect}"
         CloudTm::Init.initializeTxSystem(config, CloudTm::Config::Framework::ISPN)
+        Madmass.logger.debug "[Ispn] Initialized TxSystem"
       end
     end
   end

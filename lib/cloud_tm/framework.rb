@@ -55,11 +55,14 @@ module CloudTm
 
       def init(options)
         case options[:framework]
-        when CloudTm::Config::Framework::FENIX
+          when CloudTm::Config::Framework::FENIX
+            Madmass.logger.debug "[CloudTm::Framework] Initializing JVSTM"
           Fenix::Loader.init(options)
         when CloudTm::Config::Framework::OGM
+          Madmass.logger.debug "[CloudTm::Framework] Initializing OGM"
           Ogm::Loader.init(options)
-        when CloudTm::Config::Framework::ISPN
+          when CloudTm::Config::Framework::ISPN
+            Madmass.logger.debug "[CloudTm::Framework] Initializing ISPN"
           Ispn::Loader.init(options)
         else
           raise "Cannot find CloudTM framework: #{options[:framework]}"
@@ -76,7 +79,10 @@ end
 # Load domain models
 CloudTm::GeoObject   = Java::ItAlgoGeographDomain::GeoObject
 CloudTm::Agent       = Java::ItAlgoGeographDomain::Agent
-CloudTm::Job       = Java::ItAlgoGeographDomain::Job
+CloudTm::Properties       = Java::ItAlgoGeographDomain::Properties
+CloudTm::Post       = Java::ItAlgoGeographDomain::Post
+CloudTm::Place       = Java::ItAlgoGeographDomain::Place
+CloudTm::Comment     = Java::ItAlgoGeographDomain::Comment
 DomainRoot  = Java::ItAlgoGeographDomain::Root
 
 Dir[File.join(CLOUDTM_PATH, '*.rb')].each{|ruby|

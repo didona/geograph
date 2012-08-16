@@ -30,6 +30,7 @@ begin
   require File.join(Rails.root, 'lib', 'cloud_tm', 'framework')
 
   # loading the Fenix Framework
+  Madmass.logger.debug "[initializers/cloud_tm] Initializing Framework"
   CloudTm::Framework.init(
     :dml => 'geograph.dml',
     :conf => 'infinispan-udp-conf-geograph.xml',

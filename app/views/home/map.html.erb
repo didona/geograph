@@ -71,7 +71,11 @@
   function addGeoObject(geoObject) {
     //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
     var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
-    
+    $geoObject = geoObject;
+    console.info("Adding new geoobject, type:");
+    console.info(JSON.stringify(geoObject.type));
+    console.info("-----------");
+
     markers[geoObject.id] = new google.maps.Marker({
       position: latlng,
       map: map,
@@ -80,12 +84,15 @@
     });
     // centerMap(latlng);
 
+    console.info("Added new marker:");
+
     var icon = null;
-    if(geoObject.data.type == "MovableAgent") {
+    if(geoObject.type == "MovableAgent") {
       icon = '/assets/bike.png';
-    } else if(geoObject.data.type == "BloggerAgent"){
+    } else if(geoObject.type == "BloggerAgent"){
       icon = '/assets/post.png';
     }
+    console.info("Type checked");
     if(icon != null) markers[geoObject.id].setIcon(icon);
 
     addInfoWindow(geoObject, markers[geoObject.id]);

@@ -59,7 +59,7 @@ module CloudTm
 
       def create_with_root attrs = {}, &block
         create_without_root(attrs) do |instance|
-          instance.set_root manager.getRoot
+          manager.getRoot.add_agents instance
         end
       end
 

@@ -1,6 +1,8 @@
 package it.algo.geograph.domain;
 
 
+// VALUE TYPES
+
 valueType java.math.BigDecimal as Decimal {
     externalizeWith {
         String toString();
@@ -8,51 +10,78 @@ valueType java.math.BigDecimal as Decimal {
 }
 
 
+// DOMAIN OBJECTS
+
 class GeoObject {
+  String type;
   Decimal latitude;
   Decimal longitude;
-  String body;
-  String type;
 }
 
-class Agent {
+class Agent extends GeoObject{
   String status;
   String user;
 }
 
-class Job {
-  String name;
-  boolean enabled;
-  Integer distance;
+class Post  extends GeoObject{
+  Integer likes;
+  String text;
+  String user;
 }
 
-// This is the root domain object
-class Root {
+class Place  extends GeoObject{
+  String description;
+  String user;
+  Integer checkins;
+}
+
+class Comment {
+  String text;
+}
+
+class Properties {
+  String edge_processor_strategy; // job or action
+}
+
+
+class Root { // This is the root domain object
     boolean loaded;         // auxiliary slot for the bootstrap sequence
-    Integer numGeoObjectIds;    // for the generation of geo object ids
+    Integer numAgentIds;    // for the generation of Agent ids
+    Integer numPropertiesIds; // FIXME is this the right way to do it?
 }
 
-relation RootHasGeoObjects {
-    Root playsRole root;
-    GeoObject playsRole geoObjects { multiplicity *; }
-}
 
-relation RootHasAgents {
-    Root playsRole root;
+// RELATIONS
+
+relation RootHasAgent {
+    Root playsRole;  //For unidirectional write no role name
     Agent playsRole agents { multiplicity *; }
 }
 
-relation RootHasJobs {
-    Root playsRole root;
-    Job playsRole jobs { multiplicity *; }
-}
-
-relation GeoObjectHasEdges {
-    GeoObject playsRole incoming { multiplicity 0..*; }
-    GeoObject playsRole outcoming { multiplicity 0..*; }
-}
-
-relation AgentHasGeoObjects {
+relation AgentHasPost { //add posts must use closed simulation to avoid conflicts
     Agent playsRole agent;
-    GeoObject playsRole geoObjects { multiplicity 0..*; }
+    Post playsRole posts { multiplicity *; }
 }
+
+relation AgentWroteComment { //add posts must use closed simulation to avoid conflicts
+    Agent playsRole agent;
+    Comment playsRole comments { multiplicity *; }
+}
+
+relation PostHasComment { //add posts must use closed simulation to avoid conflicts
+    Post playsRole post;
+    Comment playsRole comments { multiplicity *; }
+}
+
+relation PlaceHasPost { //add posts must use closed simulation to avoid conflicts
+    Place playsRole place;
+    Post playsRole posts { multiplicity *; }
+}
+
+relation GeoObjectHasGeoObject{
+  GeoObject playsRole neighbours { multiplicity *; }
+  GeoObject playsRole; // this is IMPORTANT!!! :-)
+}
+
+
+

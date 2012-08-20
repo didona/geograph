@@ -55,6 +55,7 @@ module Actions
       attrs[:latitude] = java.math.BigDecimal.new(attrs[:latitude])
       attrs[:longitude] = java.math.BigDecimal.new(attrs[:longitude])
       @geo_object = CloudTm::GeoObject.create(attrs)
+
     end
 
 

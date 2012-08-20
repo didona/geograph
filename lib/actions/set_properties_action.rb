@@ -33,8 +33,8 @@
 # that is briefly described in the Madmass::Action::Action class.
 
 module Actions
-  class SetJobAction < Madmass::Action::Action
-    action_params :name,  :distance
+  class SetPropertiesAction < Madmass::Action::Action
+    action_params :name, :distance
     #action_states :none
     #next_state :none
 
@@ -47,18 +47,21 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
-      job = CloudTm::Job.where(:name => @parameters[:name]).first
-      unless job
-        job = CloudTm::Job.create
-      end
-      job.name = @parameters[:name]
-      job.enabled = true
-      job.distance = @parameters[:distance].to_i
+      property = CloudTm::Properties.all.first
+
+      property = CloudTm::Properties.create unless property
+
+      Rails.logger.debug "Setting edge processor properties: strategy #{@parameters[:name]} distance #{@parameters[:distance]}"
+
+      #edge_processor_strategy
+      property.edge_processor_strategy = @parameters[:name]
+      #property.enabled = true
+      property.distance = @parameters[:distance].to_i
       # disable all others jobs
-      CloudTm::Job.all.each do |job|
-        next if job.name == @parameters[:name]
-        job.enabled = false
-      end
+      #CloudTm::Properties.all.each do |job|
+      #  next if property.name == @parameters[:name]
+      #  property.enabled = false
+      #end
     end
 
     # [MANDATORY] Override this method in your action to define
@@ -66,7 +69,7 @@ module Actions
     def build_result
       p = Madmass::Perception::Percept.new(self)
 #      p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
-      p.data =  {:executed => true}
+      p.data = {:executed => true}
       Madmass.current_perception << p
     end
 

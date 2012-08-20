@@ -44,16 +44,10 @@ module Actions
     # the action effects.
     def execute
       agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
-      if agent
-        #destroy geo-objects
-        if agent.hasAnyGeoObjects
-          agent.getGeoObjects.each do |o|
-            o.destroy
-          end
-        end
-        #destroy agent
-        agent.destroy
-      end
+      #destroy agent
+      agent.destroy
+
+
     end
 
     # [MANDATORY] Override this method in your action to define

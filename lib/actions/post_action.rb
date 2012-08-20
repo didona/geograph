@@ -63,6 +63,7 @@ class Actions::PostAction < Madmass::Action::Action
       :type => @parameters[:data][:type]
     )
     @agent.addPosts(@geo_post)
+    @geo_post.compute_neighbors
 
     #FIXME if edges_enabled?
     #  @geo_post.renew_edges(@job.distance)

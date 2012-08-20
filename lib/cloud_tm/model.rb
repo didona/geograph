@@ -51,8 +51,9 @@ module CloudTm
       def all
         manager = CloudTm::TxSystem.getManager
         root = manager.getRoot
-        #  Madmass.logger.info("Root #{root.oid}")
-        return root.getAgents
+        result = root.getAgents
+        Madmass.logger.info("Agent #{result.inspect}")
+        return result
       end
 
       def create attrs = {}, &block

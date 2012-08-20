@@ -41,6 +41,7 @@ class Comment {
 
 class Properties {
   String edge_processor_strategy; // job or action
+  Integer distance;
 }
 
 
@@ -57,6 +58,12 @@ relation RootHasAgent {
     Root playsRole;  //For unidirectional write no role name
     Agent playsRole agents { multiplicity *; }
 }
+
+relation RootHasProperties {
+   Root playsRole;
+   Properties playsRole properties { multiplicity 0..1; }
+}
+
 
 relation AgentHasPost { //add posts must use closed simulation to avoid conflicts
     Agent playsRole agent;

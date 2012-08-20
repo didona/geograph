@@ -50,32 +50,26 @@ module CloudTm
       #FIXME manager.getRoot.removeGeoObjects(self)
     end
 
-    def remove_edges
-      #FIXME
-      #getIncoming.each do |inc|
-      #  removeIncoming(inc)
-      #end
-      #getOutcoming.each do |out|
-      #  removeOutcoming(out)
-      #end
-    end
 
-    def renew_edges(distance)
-      #FIXME
-      #remove_edges
-      #new_neighbors = neighbors(distance)
-      #new_neighbors.each do |geo_obj|
-      #  addIncoming(geo_obj)
-      #  geo_obj.addIncoming(self)
-      #end
-    end
-
-    def neighbors(distance)
-      CloudTm::GeoObject.all.select do |geo_obj|
-        (self != geo_obj) and
-          (HaversineDistance.calculate(self, geo_obj) <= distance)
+    def compute_neighbors
+      properties = Properties.current
+      return unless properties and  properties.edge_processor_strategy
+      return if(properties.edge_processor_strategy != "action")
+      return unless(self.instance_of?(Agent))
+      Rails.logger.debug "TODO: Computing neighbors"
+      CloudTm::GeoObject.all.each do |geo_obj|
+        next if (self == geo_obj)
+        Rails.logger.debug "#{self.methods}"
+        if (HaversineDistance.calculate(self, geo_obj) <= properties.distance)
+          self.add_neighbors geo_obj
+          geo_obj.add_neighbors self
+        else
+          self.remove_neighbours geo_obj
+          geo_obj.remove_neighbours self
+        end
       end
     end
+
 
     def edges_for_percept
       #FIXME
@@ -103,19 +97,20 @@ module CloudTm
         end
         return nil
       end
-      
+
       def create_with_root attrs = {}, &block
         create_without_root(attrs) do |instance|
-         # instance.set_root manager.getRoot
+          # instance.set_root manager.getRoot
         end
       end
+
 
       alias_method_chain :create, :root
 
       #CHECKME
       def all
         geo_objects = [];
-        agents =  manager.getRoot.getAgents.to_a
+        agents = manager.getRoot.getAgents.to_a
         agents.each do |agent|
           geo_objects += agent.getPosts.to_a
         end

@@ -55,6 +55,7 @@ module Actions
         Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")
         @agent = CloudTm::Agent.create :user => @parameters[:user][:id]
       end
+      @agent.compute_neighbors()
     end
 
     # [MANDATORY] Override this method in your action to define

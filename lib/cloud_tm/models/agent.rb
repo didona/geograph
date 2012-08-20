@@ -33,6 +33,7 @@ module CloudTm
     include CloudTm::Model
 
     def destroy
+      #FIXME do proper destroy, when DML supports it
       manager.getRoot.removeAgents(self)
     end
 
@@ -41,11 +42,10 @@ module CloudTm
       def find_by_user(uid)
         agent = CloudTm::Agent.where(:user => uid).first
 
-        until agent
-          Madmass.logger.warn "Agent for user #{uid} not found! Retrying."
-          java.util.sleep(50)
-          agent = CloudTm::Agent.where(:user => uid).first
+        unless agent
+          raise Madmass::Errors::RolbackError.new("Agent for user #{uid} not found! Retrying.")
         end
+
         agent
       end
 
@@ -56,6 +56,7 @@ module CloudTm
         end
         return nil
       end
+
 
       def create_with_root attrs = {}, &block
         create_without_root(attrs) do |instance|

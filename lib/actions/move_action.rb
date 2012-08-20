@@ -70,6 +70,7 @@ module Actions
         :type => @parameters[:data][:type]
       )
 
+      @agent.compute_neighbors
       #@agent.addGeoObjects(@geo_object) unless has_geoobj
 
       #FIXME

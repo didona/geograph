@@ -94,9 +94,10 @@ module Actions
         }
       }
 
-     #FIXME if edges_enabled?
-     #   p.data[:edges] = @geo_object.edges_for_percept
-     # end
+      if @agent.edges_for_percept
+        p.data[:edges] = @agent.edges_for_percept
+      end
+
 
       Madmass.current_perception = []
       Madmass.current_perception << p
@@ -121,12 +122,12 @@ module Actions
 
     private
 
-    def edges_enabled?
-      jobs = CloudTm::Job.where(:name => 'action')
-      return false if jobs.empty?
-      @job = jobs.first
-      return @job.enabled?
-    end
+    #def edges_enabled?
+    #  jobs = CloudTm::Job.where(:name => 'action')
+    #  return false if jobs.empty?
+    #  @job = jobs.first
+    #  return @job.enabled?
+    #end
 
   end
 

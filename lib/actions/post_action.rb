@@ -64,10 +64,6 @@ class Actions::PostAction < Madmass::Action::Action
     )
     @agent.addPosts(@geo_post)
     @geo_post.compute_neighbors
-
-    #FIXME if edges_enabled?
-    #  @geo_post.renew_edges(@job.distance)
-    #end
   end
 
   # [MANDATORY] Override this method in your action to define
@@ -84,9 +80,11 @@ class Actions::PostAction < Madmass::Action::Action
       }
     }
 
-    #FIXME if edges_enabled?
-    #  p.data[:edges] = @geo_post.edges_for_percept
-    #end
+    if @geo_post
+      Madmass.logger.debug "adding egdes to @geo_post"
+      p.data[:edges] = @geo_post.edges_for_percept
+    end
+
 
     Madmass.current_perception = []
     Madmass.current_perception << p

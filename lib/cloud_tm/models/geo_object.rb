@@ -51,18 +51,17 @@ module CloudTm
     end
 
 
+    #just for action strategy
     def compute_neighbors
-      properties = Properties.current
-      return unless properties and  properties.edge_processor_strategy
-      return if(properties.edge_processor_strategy != "action")
-      return unless(self.instance_of?(Agent))
+      distance = action_strategy_distance
+      return if(distance < 0)
       Rails.logger.debug "TODO: Computing neighbors"
       CloudTm::GeoObject.all.each do |geo_obj|
         next if (self == geo_obj)
         Rails.logger.debug "#{self.methods}"
-        if (HaversineDistance.calculate(self, geo_obj) <= properties.distance)
-          self.add_neighbors geo_obj
-          geo_obj.add_neighbors self
+        if (HaversineDistance.calculate(self, geo_obj) <= distance)
+          self.add_neighbours geo_obj
+          geo_obj.add_neighbours self
         else
           self.remove_neighbours geo_obj
           geo_obj.remove_neighbours self
@@ -72,20 +71,30 @@ module CloudTm
 
 
     def edges_for_percept
-      #FIXME
+
       edges = []
-      #getIncoming.each do |geo_obj|
-      #  edges << {:from => {
-      #      :id => self.oid,
-      #      :latitude => self.latitude.to_s,
-      #      :longitude => self.longitude.to_s
-      #    }, :to => {
-      #      :id => geo_obj.oid,
-      #      :latitude => geo_obj.latitude.to_s,
-      #      :longitude => geo_obj.longitude.to_s
-      #    }}
-      #end
+      get_neighbours.each do |geo_obj|
+        edges << {:from => {
+          :id => self.oid,
+          :latitude => self.latitude.to_s,
+          :longitude => self.longitude.to_s
+        }, :to => {
+          :id => geo_obj.oid,
+          :latitude => geo_obj.latitude.to_s,
+          :longitude => geo_obj.longitude.to_s
+        }}
+      end
+      Madmass.logger.debug "New edges are #{edges.inspect}"
       edges
+    end
+
+    def action_strategy_distance
+      properties = Properties.current
+      return -1 unless properties and properties.edge_processor_strategy
+      return -1 if (properties.edge_processor_strategy != "action")
+      #FIXME should not consider Blogger and Reader Agent
+      # return -1 if (self.type == BloggerAgent or self.type == ReaderAgent)
+      properties.distance
     end
 
     class << self

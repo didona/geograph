@@ -70,7 +70,7 @@ module Actions
         :type => @parameters[:data][:type]
       )
 
-      @agent.compute_neighbors
+      @agent.compute_neighbours "action"
       #@agent.addGeoObjects(@geo_object) unless has_geoobj
 
       #FIXME
@@ -94,9 +94,8 @@ module Actions
         }
       }
 
-      if @agent.edges_for_percept
-        p.data[:edges] = @agent.edges_for_percept
-      end
+      edges =  @agent.edges_for_percept "action"
+      p.data[:edges] = edges if edges
 
 
       Madmass.current_perception = []

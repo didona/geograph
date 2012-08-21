@@ -65,7 +65,7 @@ module CloudTm
       end
 
       def create_with_root attrs = {}, &block
-        Rails.logger.debug "root methods: #{manager.getRoot.methods.inspect}"
+        #Rails.logger.debug "root methods: #{manager.getRoot.methods.inspect}"
         create_without_root(attrs) do |instance|
           manager.getRoot.properties = instance
         end

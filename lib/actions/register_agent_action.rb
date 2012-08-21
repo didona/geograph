@@ -34,7 +34,7 @@
 
 module Actions
   class RegisterAgentAction < Madmass::Action::Action
-    action_params :user
+    action_params :user, :data
     #action_states :none
     #next_state :none
 
@@ -53,9 +53,9 @@ module Actions
       @agent = CloudTm::Agent.where(:user => @parameters[:user][:id]).first
       unless @agent
         Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")
-        @agent = CloudTm::Agent.create :user => @parameters[:user][:id]
+        @agent = CloudTm::Agent.create :user => @parameters[:user][:id], :type => @parameters[:type]
       end
-      @agent.compute_neighbors()
+      @agent.compute_neighbours "action"
     end
 
     # [MANDATORY] Override this method in your action to define

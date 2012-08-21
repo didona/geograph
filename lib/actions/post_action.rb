@@ -63,7 +63,7 @@ class Actions::PostAction < Madmass::Action::Action
       :type => @parameters[:data][:type]
     )
     @agent.addPosts(@geo_post)
-    @geo_post.compute_neighbors
+    @geo_post.compute_neighbours "action"
   end
 
   # [MANDATORY] Override this method in your action to define
@@ -81,8 +81,8 @@ class Actions::PostAction < Madmass::Action::Action
     }
 
     if @geo_post
-      Madmass.logger.debug "adding egdes to @geo_post"
-      p.data[:edges] = @geo_post.edges_for_percept
+      edges =  @geo_post.edges_for_percept "action"
+      p.data[:edges] = edges if edges
     end
 
 
@@ -111,12 +111,12 @@ class Actions::PostAction < Madmass::Action::Action
 
   private
 
-  def edges_enabled?
-    jobs = CloudTm::Job.where(:name => 'action')
-    return false if jobs.empty?
-    @job = jobs.first
-    return @job.enabled?
-  end
+  #def edges_enabled?
+  #  jobs = CloudTm::Job.where(:name => 'action')
+  #  return false if jobs.empty?
+  #  @job = jobs.first
+  #  return @job.enabled?
+  #end
 
 end
 

@@ -73,6 +73,7 @@
     var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
     $geoObject = geoObject;
     console.info("Adding new geoobject, type:");
+    console.info(JSON.stringify(geoObject));
     console.info(JSON.stringify(geoObject.type));
     console.info("-----------");
 
@@ -87,9 +88,9 @@
     console.info("Added new marker:");
 
     var icon = null;
-    if(geoObject.type == "MovableAgent") {
+    if(geoObject.data.type == "MovableAgent") {
       icon = '/assets/bike.png';
-    } else if(geoObject.type == "BloggerAgent"){
+    } else if(geoObject.data.type == "BloggerAgent"){
       icon = '/assets/post.png';
     }
     console.info("Type checked");
@@ -364,12 +365,15 @@
   }
 
   $(document).ready(function() {
+    tmp = null;
     $("#refresh-button").button();
     slideRefresh()
     
     initializeMap();
     var _geoObjects = <%= @geo_objects.html_safe %>;
+    tmp = _geoObjects;
     _geoObjects.each(function(geoObject){
+      console.log(geoObject);
       currentGeoObjects[geoObject.id] = geoObject;
       addGeoObject(geoObject);
     });
@@ -381,4 +385,3 @@
     });
   });
 </script>
-

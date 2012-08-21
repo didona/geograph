@@ -34,13 +34,13 @@ class HomeController < ApplicationController
   respond_to :html, :js
   
   def index
-    @geo_objects = CloudTm::GeoObject.all.to_json
+    @geo_objects = CloudTm::GeoObject.all.to_dml_json
   end
 
   def map
     geo_objects_in_cache = CloudTm::GeoObject.all
-    @geo_objects = geo_objects_in_cache.to_json
-    @edges = geo_objects_in_cache.map(&:edges_for_percept).flatten.to_json
+    @geo_objects = geo_objects_in_cache.to_dml_json
+    @edges = geo_objects_in_cache.map(&:edges_for_percept).flatten.to_json #FIXME
   end
 
   private

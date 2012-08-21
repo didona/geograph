@@ -52,13 +52,13 @@ module CloudTm
 
 
     #just for action strategy
-    def compute_neighbors
-      distance = action_strategy_distance
+    def compute_neighbours(strategy)
+      distance = edge_max_dist(strategy)
+      Rails.logger.debug "Request for computing neighbors with #{strategy} strategy and distance #{distance}"
       return if(distance < 0)
-      Rails.logger.debug "TODO: Computing neighbors"
+      Rails.logger.debug "Computing neighbors for #{strategy} strategy"
       CloudTm::GeoObject.all.each do |geo_obj|
         next if (self == geo_obj)
-        Rails.logger.debug "#{self.methods}"
         if (HaversineDistance.calculate(self, geo_obj) <= distance)
           self.add_neighbours geo_obj
           geo_obj.add_neighbours self
@@ -70,8 +70,8 @@ module CloudTm
     end
 
 
-    def edges_for_percept
-
+    def edges_for_percept strategy = "any"
+      return nil if(edge_max_dist(strategy)<0)
       edges = []
       get_neighbours.each do |geo_obj|
         edges << {:from => {
@@ -88,10 +88,10 @@ module CloudTm
       edges
     end
 
-    def action_strategy_distance
+    def edge_max_dist(strategy)
       properties = Properties.current
       return -1 unless properties and properties.edge_processor_strategy
-      return -1 if (properties.edge_processor_strategy != "action")
+      return -1 if (properties.edge_processor_strategy != strategy and strategy != "any")
       #FIXME should not consider Blogger and Reader Agent
       # return -1 if (self.type == BloggerAgent or self.type == ReaderAgent)
       properties.distance
@@ -118,7 +118,7 @@ module CloudTm
 
       #CHECKME
       def all
-        geo_objects = [];
+        geo_objects = []
         agents = manager.getRoot.getAgents.to_a
         agents.each do |agent|
           geo_objects += agent.getPosts.to_a

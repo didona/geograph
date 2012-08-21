@@ -36,27 +36,28 @@ class EdgesProcessor
 
   # Starts the production
   def run
-    #Rails.logger.debug "Processing Edges"
+    Madmass.logger.debug "Processing Edges"
     begin
       Madmass.current_agent.execute({:cmd => 'actions::process_edges'})
     rescue Exception => ex
-      cause = main_cause ex
-      unless cause.is_a?(Madmass::Errors::NotApplicableError)
-        Madmass.logger.error("Raising a nasty error from the edge processor")
-        raise cause
-      end
+      #cause = main_cause ex
+      #unless cause.is_a?(Madmass::Errors::NotApplicableError)
+      Madmass.logger.error("Raising a nasty error from the edge processor #{ex.inspect}")
+      Madmass.logger.error("#{ex.message}")
+      Madmass.logger.error("#{ex.backtrace.join("\n")}")
     end
   end
 
-  def main_cause exc
-    main_causes_class = [Madmass::Errors::NotApplicableError]
-    current = exc
-    while current
-    #  Madmass.logger.warn("Inspecting exception: #{current.class} --  #{current.message}")
-      return current if main_causes_class.detect() { |c| c == current.class }
-      current = current.class.method_defined?(:cause) ? current.cause : nil
-    end
-    return exc
-  end
+
+#def main_cause exc
+#  main_causes_class = [Madmass::Errors::NotApplicableError]
+#  current = exc
+#  while current
+#    #  Madmass.logger.warn("Inspecting exception: #{current.class} --  #{current.message}")
+#    return current if main_causes_class.detect() { |c| c == current.class }
+#    current = current.class.method_defined?(:cause) ? current.cause : nil
+#  end
+#  return exc
+#end
 
 end

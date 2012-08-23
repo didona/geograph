@@ -6,7 +6,7 @@
   <%= button_tag "start refresh", :id => 'refresh-button', :onclick => "switchRefresh();" %>
 </div>
 
-<div id="refresh-slider-container" style="width: 300px; margin: 5px auto 20px auto;" >
+<div id="refresh-slider-container" style="width: 300px; margin: 5px auto 20px auto;">
   <label for="name">refresh time: <span id="refresh-label">5</span> (sec)</label>
   <%= hidden_field_tag "refresh_time" %>
   <div class="refresh-slider slider" rel="new"></div>
@@ -35,7 +35,7 @@
   }
 
   function refreshMap() {
-    $.ajax({url: 'map', dataType: 'script'});
+    $.ajax({url:'map', dataType:'script'});
   }
 
   function changeRefresh(time) {
@@ -60,40 +60,47 @@
   function initializeMap() {
     var latlng = new google.maps.LatLng(mapCenterLat, mapCenterLng);
     var myOptions = {
-      zoom: 2,
-      center: latlng,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      zoom:2,
+      center:latlng,
+      mapTypeId:google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
   }
 
   function addGeoObject(geoObject) {
+    //console.info("Received new geoobject:");
+    //console.info(JSON.stringify(geoObject));
+    if(geoObject == null || geoObject.data.type == null) {
+      console.warn("Invalid GeoObject, ignoring");
+      return;
+    }
     //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
     var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
-    $geoObject = geoObject;
-    console.info("Adding new geoobject, type:");
-    console.info(JSON.stringify(geoObject));
-    console.info(JSON.stringify(geoObject.type));
-    console.info("-----------");
+   // console.info("-----------");
 
     markers[geoObject.id] = new google.maps.Marker({
-      position: latlng,
-      map: map,
+      position:latlng,
+      map:map,
       //animation: google.maps.Animation.DROP,
       title:"GeoObject: " + geoObject.id
     });
     // centerMap(latlng);
 
-    console.info("Added new marker:");
+    //console.info("Added new marker:");
 
     var icon = null;
-    if(geoObject.data.type == "MovableAgent") {
+    if(geoObject.data.type == "Mover") {
       icon = '/assets/bike.png';
-    } else if(geoObject.data.type == "BloggerAgent"){
+    } else if(geoObject.data.type == "Post") {
       icon = '/assets/post.png';
     }
-    console.info("Type checked");
+
+    if(icon == null) {
+      return;
+    }
+
+    //console.info("Type checked");
     if(icon != null) markers[geoObject.id].setIcon(icon);
 
     addInfoWindow(geoObject, markers[geoObject.id]);
@@ -102,7 +109,7 @@
   function addInfoWindow(geoObject, marker) {
     var infoWindowContent = infoWindowSource(geoObject);
     var infoWindow = new google.maps.InfoWindow({
-      content: infoWindowContent
+      content:infoWindowContent
     });
     google.maps.event.addListener(marker, 'click', function() {
       infoWindow.open(map, marker);
@@ -141,7 +148,7 @@
   }
 
   function destroyGeoObjects(ids) {
-    ids.each(function(_id){
+    ids.each(function(_id) {
       markers[_id].setMap(null);
       markers[_id] = null;
     });
@@ -167,7 +174,7 @@
       destroyGeoObjects(geoObject.ids);
       return;
     }
-    
+
     if(markers[geoObject.id] != undefined) {
       moveGeoObject(geoObject);
     } else {
@@ -180,7 +187,9 @@
     posts.each(function(post) {
       if(markers[post.id] != null) {
         markers[post.id].setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function() {markers[post.id].setAnimation(null);}, 2000);
+        setTimeout(function() {
+          markers[post.id].setAnimation(null);
+        }, 2000);
       }
     });
   }
@@ -202,17 +211,17 @@
 
   function addEdge(edge) {
     //$log(JSON.stringify(edge));
-    
+
     var edgeCoordinates = [
       new google.maps.LatLng(edge.from.latitude, edge.from.longitude),
       new google.maps.LatLng(edge.to.latitude, edge.to.longitude)
     ];
-    
+
     var edgePath = new google.maps.Polyline({
-      path: edgeCoordinates,
-      strokeColor: "#FF0000",
-      strokeOpacity: 1.0,
-      strokeWeight: 2
+      path:edgeCoordinates,
+      strokeColor:"#FF0000",
+      strokeOpacity:1.0,
+      strokeWeight:2
     });
 
     edgePath.setMap(map);
@@ -224,10 +233,13 @@
     mapEdges[edgeIdx].push(edgePath);
   }
 
-  function edgeIndex(edge) {    
+  function edgeIndex(edge) {
+
     var sortedIds = [edge.from.id, edge.to.id].sort();
     var index = "";
-    sortedIds.each(function(id){ return index += id; });
+    sortedIds.each(function(id) {
+      return index += id;
+    });
     return index;
   }
 
@@ -258,23 +270,16 @@
 
 
   function refreshEdges(freshEdges) {
-    removeAllEdges();
-    freshEdges.each(function(edge){
-      addEdge(edge);
-    });
-  }
-
-  function refreshEdgesBetter(freshEdges) {
     freshEdges.each(function(edge) {
       var _edgeIndex = edgeIndex(edge);
       var existingEdge = currentEdges.get(_edgeIndex);
       // if the edge exists update its position if changed
       if(existingEdge != null) {
-        if( edgeChanged(existingEdge, edge) ) {
+        if(edgeChanged(existingEdge, edge)) {
           removeEdge(edge);
           addEdge(edge);
           currentEdges[_edgeIndex] = edge;
-        }        
+        }
         currentEdges[_edgeIndex]['exists_at_cycle'] = currentCycle;
       } else {
         // if the edge don't exists create it
@@ -296,27 +301,29 @@
 
   function edgeChanged(edgeA, edgeB) {
     return(
-    (edgeA.from.latitude  != edgeB.from.latitude) ||
-      (edgeA.from.longitude  != edgeB.from.longitude) ||
-      (edgeA.to.latitude  != edgeB.to.latitude) ||
-      (edgeA.to.longitude  != edgeB.to.longitude)
-  )
+      (edgeA.from.latitude != edgeB.from.latitude) ||
+        (edgeA.from.longitude != edgeB.from.longitude) ||
+        (edgeA.to.latitude != edgeB.to.latitude) ||
+        (edgeA.to.longitude != edgeB.to.longitude)
+      )
   }
 
   function geoObjectChanged(goA, goB) {
     return(
-    (goA.latitude != goB.latitude) ||
-      (goA.longitude != goB.longitude)
-  );
+      (goA.latitude != goB.latitude) ||
+        (goA.longitude != goB.longitude)
+      );
   }
 
 
-  function refreshGeoObjectsBetter(freshGeoObjects) {
+  function refreshGeoObjects(freshGeoObjects) {
     freshGeoObjects.each(function(geoObject) {
+      //console.info("received from server:");
+      //console.info(JSON.stringify(geoObject));
       var existingGeoObject = currentGeoObjects.get(geoObject.id);
       // if the geoObject exists update its position if changed
       if(existingGeoObject != null) {
-        if( geoObjectChanged(existingGeoObject, geoObject) ) {
+        if(geoObjectChanged(existingGeoObject, geoObject)) {
           destroyGeoObject(geoObject);
           addGeoObject(geoObject);
           currentGeoObjects[geoObject.id] = geoObject;
@@ -340,24 +347,17 @@
     //    currentCycle++;
   }
 
-  function refreshGeoObjects(freshGeoObjects) {
-    destroyAllGeoObjects();
-    freshGeoObjects.each(function(geoObject){
-      addGeoObject(geoObject);
-    });
-  }
 
-  
   function slideRefresh() {
     $('.refresh-slider').slider({
-      min: 1,
-      max: 60,
-      step: 1,
-      value: refreshTime,
-      create: function(event, ui) {
+      min:1,
+      max:60,
+      step:1,
+      value:refreshTime,
+      create:function(event, ui) {
         $(this).slider('value', refreshTime);
       },
-      slide: function(event, ui) {
+      slide:function(event, ui) {
         $("#refresh-label").html(ui.value);
         changeRefresh(ui.value);
       }
@@ -365,21 +365,19 @@
   }
 
   $(document).ready(function() {
-    tmp = null;
     $("#refresh-button").button();
     slideRefresh()
-    
+
     initializeMap();
     var _geoObjects = <%= @geo_objects.html_safe %>;
-    tmp = _geoObjects;
-    _geoObjects.each(function(geoObject){
-      console.log(geoObject);
+    _geoObjects.each(function(geoObject) {
+      //console.log(geoObject);
       currentGeoObjects[geoObject.id] = geoObject;
       addGeoObject(geoObject);
     });
 
     var _edges = <%= @edges.html_safe %>;
-    _edges.each(function(edge){
+    _edges.each(function(edge) {
       currentEdges[edgeIndex(edge)] = edge;
       addEdge(edge);
     });

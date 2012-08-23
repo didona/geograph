@@ -28,15 +28,13 @@
 ###############################################################################
 
 
-# This file is the implementation of the  MoveAction.
+# This file is the implementation of the  PostAction.
 # The implementation must comply with the action definition pattern
 # that is briefly described in the Madmass::Action::Action class.
 
 
 class Actions::PostAction < Madmass::Action::Action
   action_params :latitude, :longitude, :data, :user
-  #action_states :none
-  #next_state :none
 
   # [OPTIONAL]  Add your initialization code here.
   def initialize params
@@ -47,10 +45,8 @@ class Actions::PostAction < Madmass::Action::Action
   end
 
 
-  # [MANDATORY] Override this method in your action to define
   # the action effects.
   def execute
-    # search if the agent related to all geo referenced posts (geo objects) exists
 
     @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
 
@@ -58,15 +54,13 @@ class Actions::PostAction < Madmass::Action::Action
     @geo_post.update_attributes(
       :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
       :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
-      #:body => @parameters[:data][:body],
-      :text => "Some random text for this post ...",
+      :body => @parameters[:data][:body],
       :type => @parameters[:data][:type]
     )
     @agent.addPosts(@geo_post)
     @geo_post.compute_neighbours "action"
   end
 
-  # [MANDATORY] Override this method in your action to define
   # the perception content.
   def build_result
     p = Madmass::Perception::Percept.new(self)
@@ -76,12 +70,14 @@ class Actions::PostAction < Madmass::Action::Action
         :id => @geo_post.oid,
         :latitude => @geo_post.latitude.to_s,
         :longitude => @geo_post.longitude.to_s,
-        :data => {:body => " FIXME body", :type => @geo_post.type}
+        :data => {:body => @geo_post.body,
+                  :type => @geo_post.type
+        }
       }
     }
 
     if @geo_post
-      edges =  @geo_post.edges_for_percept "action"
+      edges = @geo_post.edges_for_percept "action"
       p.data[:edges] = edges if edges
     end
 
@@ -90,33 +86,6 @@ class Actions::PostAction < Madmass::Action::Action
     Madmass.current_perception << p
   end
 
-
-  # [OPTIONAL] - The default implementation returns always true
-  # Override this method in your action to define when the action is
-  # applicable (i.e. to verify the action preconditions).
-  # def applicable?
-  #
-  #   if CONDITION
-  #     why_not_applicable.add(:'DESCR_SYMB', 'EXPLANATION')
-  #   end
-  #
-  #   return why_not_applicable.empty?
-  # end
-
-  # [OPTIONAL] Override this method to add parameters preprocessing code
-  # The parameters can be found in the @parameters hash
-  # def process_params
-  #   puts "Implement me!"
-  # end
-
-  private
-
-  #def edges_enabled?
-  #  jobs = CloudTm::Job.where(:name => 'action')
-  #  return false if jobs.empty?
-  #  @job = jobs.first
-  #  return @job.enabled?
-  #end
 
 end
 

@@ -35,10 +35,7 @@
 module Actions
   class RegisterAgentAction < Madmass::Action::Action
     action_params :user, :data
-    #action_states :none
-    #next_state :none
 
-    # [OPTIONAL]  Add your initialization code here.
     def initialize params
       super
       # uncomment this to communicate via web sockets
@@ -46,7 +43,6 @@ module Actions
     end
 
 
-    # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
       #Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
@@ -67,23 +63,6 @@ module Actions
     end
 
 
-    # [OPTIONAL] - The default implementation returns always true
-    # Override this method in your action to define when the action is
-    # applicable (i.e. to verify the action preconditions).
-    #    def applicable?
-    #      unless @geo_object = CloudTm::GeoObject.find(@parameters[:geo_object])
-    #        why_not_applicable.add(:'not-found', "Geo object #{@parameters[:geo_object]} doesn't exists.")
-    #      end
-    #      return why_not_applicable.empty?
-    #    end
-
-    # [OPTIONAL] Override this method to add parameters preprocessing code
-    # The parameters can be found in the @parameters hash
-    # def process_params
-    #   puts "Implement me!"
-    # end
-
-    private
 
 
   end

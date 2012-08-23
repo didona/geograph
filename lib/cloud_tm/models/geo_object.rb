@@ -38,7 +38,7 @@ module CloudTm
         :id => oid,
         :latitude => latitude.to_s,
         :longitude => longitude.to_s,
-        :data => {:type => type, :body => "FIXME"}
+        :data => {:type => type, :body => body}
       }
     end
 
@@ -117,6 +117,8 @@ module CloudTm
       alias_method_chain :create, :root
 
       #CHECKME
+
+
       def all
         geo_objects = []
         agents = manager.getRoot.getAgents.to_a

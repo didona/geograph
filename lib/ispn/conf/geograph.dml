@@ -14,6 +14,7 @@ valueType java.math.BigDecimal as Decimal {
 
 class GeoObject {
   String type;
+  String body;
   Decimal latitude;
   Decimal longitude;
 }

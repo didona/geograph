@@ -52,7 +52,7 @@ module CloudTm
         manager = CloudTm::TxSystem.getManager
         root = manager.getRoot
         result = root.getAgents
-        Madmass.logger.info("Agent #{result.inspect}")
+        Madmass.logger.debug("All Agents #{result.inspect}")
         return result
       end
 
@@ -63,6 +63,7 @@ module CloudTm
         end
         manager.save instance
         block.call(instance) if block_given?
+        Rails.logger.debug "Created Model #{instance.inspect} "
         instance
       end
 

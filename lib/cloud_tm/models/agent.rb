@@ -43,7 +43,7 @@ module CloudTm
         agent = CloudTm::Agent.where(:user => uid).first
 
         unless agent
-          raise Madmass::Errors::RolbackError.new("Agent for user #{uid} not found! Retrying.")
+          raise Madmass::Errors::RollbackError.new("Agent for user #{uid} not found! Retrying.")
         end
 
         agent

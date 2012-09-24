@@ -2,10 +2,10 @@ messaging:
   /queue/commands:
     Madmass::Agent::JmsExecutor:
       selector: "perception IS NULL AND ((synchronous IS NULL) OR (synchronous <> 'true'))"
-      concurrency: 1
+#      concurrency: 500
     Madmass::Agent::SyncJmsExecutor:
       selector: "perception IS NULL AND synchronous = 'true'"
-      concurrency: 1
+#      concurrency: 500
 
 #
 
@@ -33,9 +33,17 @@ jobs:
 #        commands_destination: /queue/commands
 
 
-tasks:
-  Backgroundable:
-    concurrency: 8
+#tasks:
+#  Backgroundable:
+#    concurrency: 500
 
 pooling:
-  messaging: shared
+  messaging:
+    type: shared
+    lazy: false
+  web:
+    type: shared
+    lazy: false
+  jobs:
+    type: shared
+    lazy: false

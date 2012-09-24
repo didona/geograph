@@ -36,7 +36,7 @@ Madmass.setup do |config|
   # Configure Madmass to use
   #config.tx_adapter = :'Madmass::Transaction::TorqueBoxAdapter'
   config.tx_adapter = :'Madmass::Transaction::CloudTmAdapter'
-  config.perception_sender = :"Madmass::Comm::SockySender"
+  config.perception_sender = :"Madmass::Comm::DummySender"
   #config.perception_sender = :"Madmass::Comm::JmsSender"
 
   Madmass::Utils::InstallConfig.init

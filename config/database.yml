@@ -20,6 +20,7 @@ development:
   driver: com.mysql.jdbc.Driver
   url: jdbc:mysql://localhost:3306/geograph_development
 
+
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
@@ -31,18 +32,8 @@ production:
   adapter: mysql
   xa: false
   database: agentfarm_production
-  host: 10.100.0.1
-  username: geograph
-  password: geograph_passwd
+  host: localhost
+  username: root
+  password: geograph
   encoding: utf8
 
-
-#production:
-#  adapter: jdbcmysql
-#  encoding: utf8
-#  reconnect: false
-#  database: geograph_development
-#  pool: 20
-#  username: root
-#  password:
-#  socket: /opt/local/var/run/mysql5/mysqld.sock

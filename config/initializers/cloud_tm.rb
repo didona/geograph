@@ -38,7 +38,9 @@ begin
   )
 rescue Exception => ex
   Rails.logger.error "Cannot load Cloud-TM Framework: #{ex}"
-   Rails.logger.error  "\n #{ex.backtrace.join("\n\t")}"
-   Rails.logger.error "Cause: #{ex.cause}"
-   Rails.logger.error  "\n #{ex.cause.backtrace.join("\n\t")}"
+  Rails.logger.error "\n #{ex.backtrace.join("\n\t")}"
+  if(defined?(ex.cause))
+    Rails.logger.error "Cause: #{ex.cause}"
+    Rails.logger.error "\n #{ex.cause.backtrace.join("\n\t")}" if ex.cause
+  end
 end

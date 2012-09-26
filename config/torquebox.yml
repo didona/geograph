@@ -2,10 +2,10 @@ messaging:
   /queue/commands:
     Madmass::Agent::JmsExecutor:
       selector: "perception IS NULL AND ((synchronous IS NULL) OR (synchronous <> 'true'))"
-#      concurrency: 500
+      concurrency: 4
     Madmass::Agent::SyncJmsExecutor:
       selector: "perception IS NULL AND synchronous = 'true'"
-#      concurrency: 500
+      concurrency: 8
 
 #
 
@@ -15,6 +15,8 @@ topics:
 queues:
   /queue/commands:
     durable: false
+
+
 
 jobs:
    edges.processor:
@@ -40,10 +42,10 @@ jobs:
 pooling:
   messaging:
     type: shared
-    lazy: false
+    lazy: true
   web:
     type: shared
-    lazy: false
+    lazy: true
   jobs:
     type: shared
-    lazy: false
+    lazy: true

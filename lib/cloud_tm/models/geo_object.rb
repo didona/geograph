@@ -59,7 +59,7 @@ module CloudTm
       Rails.logger.debug "Computing neighbors for #{strategy} strategy"
       CloudTm::GeoObject.all.each do |geo_obj|
         next if (self == geo_obj)
-        if (HaversineDistance.calculate(self, geo_obj) <= distance)
+        if (HaversineDistance.calculate(self.latitude, self.longitude, geo_obj.latitude, geo_obj.longitude) <= distance)
           self.add_neighbours geo_obj
           geo_obj.add_neighbours self
         else

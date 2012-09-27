@@ -41,11 +41,11 @@ RMETERS = RKM * 1000    # radius in meters
 class HaversineDistance
   class << self
 
-    def calculate( geo_object1, geo_object2 )
-      lat1 = geo_object1.latitude.to_f
-      lon1 = geo_object1.longitude.to_f
-      lat2 = geo_object2.latitude.to_f
-      lon2 = geo_object2.longitude.to_f
+    def calculate( p_lat1, p_lon1,p_lat2, p_lon2)
+      lat1 = p_lat1.to_f
+      lon1 = p_lon1.to_f
+      lat2 = p_lat2.to_f
+      lon2 = p_lon2.to_f
 
       dlon = lon2 - lon1
       dlat = lat2 - lat1

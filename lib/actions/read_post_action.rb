@@ -41,9 +41,8 @@ class Actions::ReadPostAction < Madmass::Action::Action
   # the action effects.
   def execute
 
-    geo_object = CloudTm::GeoObject.new
-    geo_object.latitude = java.math.BigDecimal.new(@parameters[:latitude])
-    geo_object.longitude = java.math.BigDecimal.new(@parameters[:longitude])
+    lat = java.math.BigDecimal.new(@parameters[:latitude])
+    lon  = java.math.BigDecimal.new(@parameters[:longitude])
 
     @posts_read = []
 
@@ -51,7 +50,7 @@ class Actions::ReadPostAction < Madmass::Action::Action
 
     CloudTm::GeoObject.all.each do |post_obj|
       next if post_obj.type != "Post"
-      if HaversineDistance.calculate(geo_object, post_obj) <= dist #FIXME @enabled_job.distance
+      if HaversineDistance.calculate(lat, lon, post_obj.latitude, post_obj.longitude) <= dist #FIXME @enabled_job.distance
         @posts_read << post_obj
         break #read just one post
       end

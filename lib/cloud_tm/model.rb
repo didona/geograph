@@ -37,7 +37,7 @@ module CloudTm
     module ClassMethods
 
       def manager
-        CloudTm::TxSystem.getManager
+        CloudTm::FenixFramework.getTransactionManager
       end
 
       def where(options = {})
@@ -49,7 +49,7 @@ module CloudTm
       end
 
       def all
-        manager = CloudTm::TxSystem.getManager
+        manager = CloudTm::FenixFramework.getTransactionManager
         root = manager.getRoot
         result = root.getAgents
         Madmass.logger.debug("All Agents #{result.inspect}")
@@ -85,7 +85,7 @@ module CloudTm
     private
 
     def manager
-      CloudTm::TxSystem.getManager
+      CloudTm::FenixFramework.getTransactionManager
     end
   end
 end

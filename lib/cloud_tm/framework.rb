@@ -29,7 +29,7 @@
 
 require 'java'
 
-require File.join(Rails.root, 'lib', 'fenix', 'loader')
+#require File.join(Rails.root, 'lib', 'fenix', 'loader')
 require File.join(Rails.root, 'lib', 'ispn', 'loader')
 
 # Load the Cloud-TM Framework.
@@ -38,7 +38,7 @@ CLOUDTM_JARS_PATH = File.join(CLOUDTM_PATH, 'jars') unless defined?(CLOUDTM_JARS
 CLOUDTM_MODELS_PATH = File.join(CLOUDTM_PATH, 'models') unless defined?(CLOUDTM_MODELS_PATH)
 
 # Require all Cloud-TM and dependencies jars
-Dir[File.join(CLOUDTM_JARS_PATH, '*.jar')].each{|jar|
+Dir[File.join(CLOUDTM_JARS_PATH, '*.jar')].each { |jar|
   require jar
 }
 # Add jars path to the class path
@@ -46,50 +46,43 @@ $CLASSPATH << CLOUDTM_JARS_PATH
 
 module CloudTm
 
-  Init     = Java::OrgCloudtmFramework::Init
-  TxSystem = Java::OrgCloudtmFramework::TxSystem
-  Config   = Java::OrgCloudtmFramework::CloudtmConfig
+  #Init = Java::OrgCloudtmFramework::Init
+  FenixFramework = Java::PtIstFenixframework::FenixFramework
+  Config = Java::OrgCloudtmFramework::CloudtmConfig
 
   class Framework
     class << self
 
-      def init(options)
-        case options[:framework]
-          when CloudTm::Config::Framework::FENIX
-            Madmass.logger.debug "[CloudTm::Framework] Initializing JVSTM"
-          Fenix::Loader.init(options)
-        when CloudTm::Config::Framework::OGM
-          Madmass.logger.debug "[CloudTm::Framework] Initializing OGM"
-          Ogm::Loader.init(options)
-          when CloudTm::Config::Framework::ISPN
-            Madmass.logger.debug "[CloudTm::Framework] Initializing ISPN"
-          Ispn::Loader.init(options)
-        else
-          raise "Cannot find CloudTM framework: #{options[:framework]}"
+      def init
+        Madmass.transaction do
+          root = FenixFramework.getDomainRoot();
+          app = root.getApp()
+          if (app == null)
+            app = App.new
+            root.setApp(app)
+          end
         end
-
       end
 
     end
   end
-
 end
 
 # TODO: make this step dynamic
 # Load domain models
-CloudTm::GeoObject   = Java::ItAlgoGeographDomain::GeoObject
-CloudTm::Agent       = Java::ItAlgoGeographDomain::Agent
-CloudTm::Properties       = Java::ItAlgoGeographDomain::Properties
-CloudTm::Post       = Java::ItAlgoGeographDomain::Post
-CloudTm::Place       = Java::ItAlgoGeographDomain::Place
-CloudTm::Comment     = Java::ItAlgoGeographDomain::Comment
-DomainRoot  = Java::ItAlgoGeographDomain::Root
+CloudTm::GeoObject = Java::ItAlgoGeographDomain::GeoObject
+CloudTm::Agent = Java::ItAlgoGeographDomain::Agent
+CloudTm::Properties = Java::ItAlgoGeographDomain::Properties
+CloudTm::Post = Java::ItAlgoGeographDomain::Post
+CloudTm::Place = Java::ItAlgoGeographDomain::Place
+CloudTm::Comment = Java::ItAlgoGeographDomain::Comment
+DomainRoot = Java::ItAlgoGeographDomain::Root
 
-Dir[File.join(CLOUDTM_PATH, '*.rb')].each{|ruby|
+Dir[File.join(CLOUDTM_PATH, '*.rb')].each { |ruby|
   next if ruby.match(/framework\.rb/)
   require ruby
 }
 
-Dir[File.join(CLOUDTM_MODELS_PATH, '*.rb')].each{|model|
+Dir[File.join(CLOUDTM_MODELS_PATH, '*.rb')].each { |model|
   require model
 }

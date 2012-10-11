@@ -27,12 +27,12 @@
 ###############################################################################
 ###############################################################################
 
-module Ispn
-  class RelationSet
-    def to_json
-      map(&:attributes_to_hash).to_json
-    end
-
-    alias :to_dml_json :to_json
-  end
-end
+#module Ispn
+#  class RelationSet
+#    def to_json
+#      map(&:attributes_to_hash).to_json
+#    end
+#
+#    alias :to_dml_json :to_json
+#  end
+#end

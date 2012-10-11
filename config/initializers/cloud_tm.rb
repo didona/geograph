@@ -31,11 +31,7 @@ begin
 
   # loading the Fenix Framework
   Madmass.logger.debug "[initializers/cloud_tm] Initializing Framework"
-  CloudTm::Framework.init(
-    :dml => 'geograph.dml',
-    :conf => 'infinispan-udp-conf-geograph.xml',
-    :framework => CloudTm::Config::Framework::ISPN
-  )
+  CloudTm::Framework.init
 rescue Exception => ex
   Rails.logger.error "Cannot load Cloud-TM Framework: #{ex}"
   Rails.logger.error "\n #{ex.backtrace.join("\n\t")}"

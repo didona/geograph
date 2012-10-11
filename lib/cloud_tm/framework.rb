@@ -29,13 +29,12 @@
 
 require 'java'
 
-#require File.join(Rails.root, 'lib', 'fenix', 'loader')
-require File.join(Rails.root, 'lib', 'ispn', 'loader')
 
 # Load the Cloud-TM Framework.
 CLOUDTM_PATH = File.join(Rails.root, 'lib', 'cloud_tm') unless defined?(CLOUDTM_PATH)
 CLOUDTM_JARS_PATH = File.join(CLOUDTM_PATH, 'jars') unless defined?(CLOUDTM_JARS_PATH)
 CLOUDTM_MODELS_PATH = File.join(CLOUDTM_PATH, 'models') unless defined?(CLOUDTM_MODELS_PATH)
+CLOUDTM_CONF_PATH = File.join(CLOUDTM_PATH, 'conf') unless defined?(CLOUDTM_CONF_PATH)
 
 # Require all Cloud-TM and dependencies jars
 Dir[File.join(CLOUDTM_JARS_PATH, '*.jar')].each { |jar|
@@ -43,12 +42,13 @@ Dir[File.join(CLOUDTM_JARS_PATH, '*.jar')].each { |jar|
 }
 # Add jars path to the class path
 $CLASSPATH << CLOUDTM_JARS_PATH
+$CLASSPATH << CLOUDTM_CONF_PATH
 
 module CloudTm
 
   #Init = Java::OrgCloudtmFramework::Init
   FenixFramework = Java::PtIstFenixframework::FenixFramework
-  Config = Java::OrgCloudtmFramework::CloudtmConfig
+  #Config = Java::OrgCloudtmFramework::CloudtmConfig
 
   class Framework
     class << self

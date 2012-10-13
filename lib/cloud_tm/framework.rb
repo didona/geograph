@@ -76,7 +76,7 @@ CloudTm::Properties = Java::ItAlgoGeographDomain::Properties
 CloudTm::Post = Java::ItAlgoGeographDomain::Post
 CloudTm::Place = Java::ItAlgoGeographDomain::Place
 CloudTm::Comment = Java::ItAlgoGeographDomain::Comment
-DomainRoot = Java::ItAlgoGeographDomain::Root
+#DomainRoot = Java::ItAlgoGeographDomain::Root
 
 Dir[File.join(CLOUDTM_PATH, '*.rb')].each { |ruby|
   next if ruby.match(/framework\.rb/)

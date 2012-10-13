@@ -50,7 +50,7 @@ module CloudTm
 
       def all
         manager = CloudTm::FenixFramework.getTransactionManager
-        root = manager.getRoot
+        root = manager.getDomainRoot.getApp
         result = root.getAgents
         Madmass.logger.debug("All Agents #{result.inspect}")
         return result

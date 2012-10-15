@@ -45,7 +45,7 @@ module CloudTm
     class << self
 
       def current
-        manager.getRoot.getProperties
+        FenixFramework.getDomainRoot().getApp.getProperties
       end
 
       def find(oid)
@@ -67,14 +67,14 @@ module CloudTm
       def create_with_root attrs = {}, &block
         #Rails.logger.debug "root methods: #{manager.getRoot.methods.inspect}"
         create_without_root(attrs) do |instance|
-          manager.getRoot.properties = instance
+          FenixFramework.getDomainRoot().getApp.properties = instance
         end
       end
 
       alias_method_chain :create, :root
 
       def all
-        properties = manager.getRoot.getProperties
+        properties = FenixFramework.getDomainRoot().getApp.getProperties
         Rails.logger.debug "All properties are #{properties.inspect}"
         Rails.logger.debug "Array of all properties is #{properties.to_a.inspect}"
         return properties.to_a if properties

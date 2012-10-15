@@ -34,7 +34,7 @@ module CloudTm
 
     def destroy
       #FIXME do proper destroy, when DML supports it
-      manager.getRoot.removeAgents(self)
+      FenixFramework.getDomainRoot().getApp.removeAgents(self)
     end
 
     class << self
@@ -60,14 +60,14 @@ module CloudTm
 
       def create_with_root attrs = {}, &block
         create_without_root(attrs) do |instance|
-          manager.getRoot.add_agents instance
+          FenixFramework.getDomainRoot().getApp.add_agents instance
         end
       end
 
       alias_method_chain :create, :root
 
       def all
-        manager.getRoot.getAgents
+        FenixFramework.getDomainRoot().getApp.getAgents
       end
 
     end

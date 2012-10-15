@@ -36,9 +36,9 @@ module CloudTm
 
     module ClassMethods
 
-      def manager
-        CloudTm::FenixFramework.getTransactionManager
-      end
+      #def manager
+      #  CloudTm::FenixFramework.getTransactionManager
+      #end
 
       def where(options = {})
         instances = []
@@ -49,8 +49,8 @@ module CloudTm
       end
 
       def all
-        manager = CloudTm::FenixFramework.getTransactionManager
-        root = manager.getDomainRoot.getApp
+        #manager = CloudTm::FenixFramework.getTransactionManager
+        root = FenixFramework.getDomainRoot().getApp
         result = root.getAgents
         Madmass.logger.debug("All Agents #{result.inspect}")
         return result
@@ -61,7 +61,7 @@ module CloudTm
         attrs.each do |attr, value|
           instance.send("#{attr}=", value)
         end
-        manager.save instance
+       # manager.save instance
         block.call(instance) if block_given?
         Rails.logger.debug "Created Model #{instance.inspect} "
         instance
@@ -82,10 +82,6 @@ module CloudTm
       true
     end
 
-    private
 
-    def manager
-      CloudTm::FenixFramework.getTransactionManager
-    end
   end
 end

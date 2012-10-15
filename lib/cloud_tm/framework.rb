@@ -55,10 +55,10 @@ module CloudTm
 
       def init
         Madmass.transaction do
-          root = FenixFramework.getDomainRoot();
+          root = FenixFramework.getDomainRoot()
           app = root.getApp()
-          if (app == null)
-            app = App.new
+          unless app
+            app = CloudTm::Root.new
             root.setApp(app)
           end
         end
@@ -76,7 +76,7 @@ CloudTm::Properties = Java::ItAlgoGeographDomain::Properties
 CloudTm::Post = Java::ItAlgoGeographDomain::Post
 CloudTm::Place = Java::ItAlgoGeographDomain::Place
 CloudTm::Comment = Java::ItAlgoGeographDomain::Comment
-#DomainRoot = Java::ItAlgoGeographDomain::Root
+CloudTm::Root = Java::ItAlgoGeographDomain::Root
 
 Dir[File.join(CLOUDTM_PATH, '*.rb')].each { |ruby|
   next if ruby.match(/framework\.rb/)

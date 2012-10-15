@@ -121,7 +121,7 @@ module CloudTm
 
       def all
         geo_objects = []
-        agents = manager.getRoot.getAgents.to_a
+        agents = FenixFramework.getDomainRoot().getApp.getAgents.to_a
         agents.each do |agent|
           geo_objects += agent.getPosts.to_a
         end

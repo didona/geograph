@@ -34,9 +34,13 @@ begin
   CloudTm::Framework.init
 rescue Exception => ex
   Rails.logger.error "Cannot load Cloud-TM Framework: #{ex}"
-  Rails.logger.error "\n #{ex.backtrace.join("\n\t")}"
-  if(defined?(ex.cause))
-    Rails.logger.error "Cause: #{ex.cause}"
-    Rails.logger.error "\n #{ex.cause.backtrace.join("\n\t")}" if ex.cause
+  Rails.logger.error ex.backtrace.join("\n")
+
+  Madmass.logger.error "*********** LOOKING FOR CAUSES ************"
+  current = ex
+  while current
+    Madmass.logger.error("Inspecting cause: #{current.class} --  #{current.message}")
+    Madmass.logger.error current.backtrace.join("\n")
+    current = current.class.method_defined?(:cause) ? current.cause : nil
   end
 end

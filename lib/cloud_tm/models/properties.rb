@@ -32,7 +32,7 @@ module CloudTm
     include CloudTm::Model
 
     def destroy
-      manager.getRoot.removeProperties(self)
+      FenixFramework.getDomainRoot().getApp.removeProperties(self)
     end
 
     def has_properties?(options)
@@ -45,7 +45,7 @@ module CloudTm
     class << self
 
       def current
-        FenixFramework.getDomainRoot().getApp.getProperties
+        FenixFramework.getDomainRoot.getApp.getProperties
       end
 
       def find(oid)
@@ -74,7 +74,7 @@ module CloudTm
       alias_method_chain :create, :root
 
       def all
-        properties = FenixFramework.getDomainRoot().getApp.getProperties
+        properties = FenixFramework.getDomainRoot.getApp.getProperties
         Rails.logger.debug "All properties are #{properties.inspect}"
         Rails.logger.debug "Array of all properties is #{properties.to_a.inspect}"
         return properties.to_a if properties

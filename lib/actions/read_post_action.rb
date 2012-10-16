@@ -65,7 +65,7 @@ class Actions::ReadPostAction < Madmass::Action::Action
     }
     @posts_read.each do |pread|
       p.data[:posts_read] << {
-        :id => pread.oid,
+        :id => pread.getExternalId,
         :latitude => pread.latitude.to_s,
         :longitude => pread.longitude.to_s
       }

@@ -65,9 +65,9 @@ class Actions::PostAction < Madmass::Action::Action
   def build_result
     p = Madmass::Perception::Percept.new(self)
     p.data = {
-      :geo_agent => @agent.oid,
+      :geo_agent => @agent.getExternalId,
       :geo_object => {
-        :id => @geo_post.oid,
+        :id => @geo_post.getExternalId,
         :latitude => @geo_post.latitude.to_s,
         :longitude => @geo_post.longitude.to_s,
         :data => {:body => @geo_post.body,

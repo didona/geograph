@@ -51,7 +51,7 @@ module CloudTm
       def find(oid)
         _oid = oid #now ids are strings .to_i
         all.each do |property|
-          return property if property.oid == _oid
+          return property if property.getExternalId == _oid
         end
         return nil
       end

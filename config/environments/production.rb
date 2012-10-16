@@ -60,7 +60,7 @@ Geograph::Application.configure do
   # config.force_ssl = true
 
   #Available levels :debug, :info, :warn, :error, and :fatal
-  config.log_level = :info
+  config.log_level = :debug
 
   # Use a different logger for distributed setups
   # config.logger = SyslogLogger.new

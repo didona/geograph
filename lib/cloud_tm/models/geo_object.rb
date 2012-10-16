@@ -35,7 +35,7 @@ module CloudTm
 
     def attributes_to_hash
       {
-        :id => oid,
+        :id => getExternalId,
         :latitude => latitude.to_s,
         :longitude => longitude.to_s,
         :data => {:type => type, :body => body}
@@ -75,11 +75,11 @@ module CloudTm
       edges = []
       get_neighbours.each do |geo_obj|
         edges << {:from => {
-          :id => self.oid,
+          :id => self.getExternalId,
           :latitude => self.latitude.to_s,
           :longitude => self.longitude.to_s
         }, :to => {
-          :id => geo_obj.oid,
+          :id => geo_obj.getExternalId,
           :latitude => geo_obj.latitude.to_s,
           :longitude => geo_obj.longitude.to_s
         }}
@@ -102,7 +102,7 @@ module CloudTm
       def find(oid)
         _oid = oid #Now ids are strings !! .to_i
         all.each do |geo_obj|
-          return geo_obj if geo_obj.oid == _oid
+          return geo_obj if geo_obj.getExternalId == _oid
         end
         return nil
       end

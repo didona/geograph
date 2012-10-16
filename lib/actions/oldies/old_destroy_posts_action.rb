@@ -46,7 +46,7 @@ module Actions
     def execute
       @ids = []
       @geo_agent.getGeoObjects.each do |geo_object|
-        @ids << geo_object.oid
+        @ids << geo_object.getExternalId
         geo_object.destroy
       end
       @geo_agent.destroy

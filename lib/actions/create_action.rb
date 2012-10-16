@@ -64,7 +64,7 @@ module Actions
     def build_result
       p = Madmass::Perception::Percept.new(self)
       #p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
-      p.data =  {:geo_object => @geo_object.oid}
+      p.data =  {:geo_object => @geo_object.getExternalId}
       Madmass.current_perception << p
     end
 

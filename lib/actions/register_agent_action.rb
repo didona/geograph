@@ -45,7 +45,7 @@ module Actions
 
     # the action effects.
     def execute
-      #Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
+      Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
       @agent = CloudTm::Agent.where(:user => @parameters[:user][:id]).first
       unless @agent
         Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")

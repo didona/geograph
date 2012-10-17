@@ -21,7 +21,7 @@ class GeoObject {
 
 class Agent extends GeoObject{
   String status;
-  String user;
+  {"unique":true} String user;
 }
 
 class Post  extends GeoObject{
@@ -54,6 +54,11 @@ class Root { // This is the root domain object
 
 
 // RELATIONS
+
+relation DomainRootHasRoot {
+    .pt.ist.fenixframework.DomainRoot playsRole;
+    Root playsRole app;
+}
 
 relation RootHasAgent {
     Root playsRole;  //For unidirectional write no role name

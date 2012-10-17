@@ -48,12 +48,8 @@ module CloudTm
         FenixFramework.getDomainRoot.getApp.getProperties
       end
 
-      def find(oid)
-        _oid = oid #now ids are strings .to_i
-        all.each do |property|
-          return property if property.getExternalId == _oid
-        end
-        return nil
+      def find_by_id(id)
+        FenixFramework.getDomainObject(id)
       end
 
       def where(options = {})

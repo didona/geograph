@@ -38,23 +38,21 @@ module CloudTm
     end
 
     class << self
+      #uses the one of CloudTm::Agent.findByUser
+      #TODO handle missing users (if needed); see following example
 
-      def find_by_user(uid)
-        agent = CloudTm::Agent.where(:user => uid).first
+      #def find_by_user(uid)
+      #  agent = XXX
+      #
+      #  unless agent
+      #    raise Madmass::Errors::RollbackError.new("Agent for user #{uid} not found! Retrying.")
+      #  end
+      #
+      #  agent
+      #end
 
-        unless agent
-          raise Madmass::Errors::RollbackError.new("Agent for user #{uid} not found! Retrying.")
-        end
-
-        agent
-      end
-
-      def find(oid)
-        _oid = oid #NOW IDS ARE STRINGS! .to_i
-        all.each do |agent|
-          return agent if agent.oid == _oid
-        end
-        return nil
+      def find_by_id(id)
+        FenixFramework.getDomainObject(id)
       end
 
 

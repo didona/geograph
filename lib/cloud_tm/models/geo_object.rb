@@ -99,12 +99,8 @@ module CloudTm
 
     class << self
 
-      def find(oid)
-        _oid = oid #Now ids are strings !! .to_i
-        all.each do |geo_obj|
-          return geo_obj if geo_obj.getExternalId == _oid
-        end
-        return nil
+      def find_by_id(id)
+        FenixFramework.getDomainObject(id)
       end
 
       def create_with_root attrs = {}, &block

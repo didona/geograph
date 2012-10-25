@@ -108,8 +108,8 @@
             <logger category="org.jboss.jca.adapters.jdbc.extensions.mysql">
                 <level name="ERROR"/>
             </logger>
-           <logger category="org.cloudtm.framework.ispn.IspnTxManager">
-                 <level name="INFO"/>
+            <logger category="pt.ist.fenixframework">
+                 <level name="WARN"/>
             </logger>
             <root-logger>
                 <level name="INFO"/>

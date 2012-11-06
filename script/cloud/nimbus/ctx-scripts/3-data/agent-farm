@@ -8,7 +8,7 @@ sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "invoked agent-
 
 $JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_jboss_conf.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted jboss conf"
 
-$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_rhq_host.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted rhq host"
+#$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_rhq_host.rb && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted rhq host"
 
 #$JRUBY_HOME/bin/jruby -S $GEOGRAPH_HOME/script/cloud/set_torquebox_host.rb "geograph-agent-farm" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "setted host"
 
@@ -23,13 +23,13 @@ sleep 20
 
 su - torquebox -c "cd $AGENT_FARM_HOME && RAILS_ENV=production $JRUBY_HOME/bin/jruby -S bundle exec rake torquebox:deploy['/farm']" && sh $GEOGRAPH_HOME/script/cloud/nimbus/log.sh "3-data/agent-farm" "agent-farm deployed"
 
-sleep 20
+#sleep 20
 
 #Start rhq agent
 #su - torquebox -c "nohup /opt/rhq/rhq-agent/bin/rhq-agent.sh --cleanconfig&"
 
 
 #start wpm
-su - torquebox -c "cd /opt/wpm; ./run_cons_prod.sh; cd -"
+#su - torquebox -c "cd /opt/wpm; ./run_cons_prod.sh; cd -"
 
 

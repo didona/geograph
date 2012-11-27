@@ -27,3 +27,7 @@
 
 /config/deploy.rb
 /config/database.yml
+
+.rvmrc
+
+relaunch.sh

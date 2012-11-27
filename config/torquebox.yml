@@ -49,3 +49,10 @@ pooling:
   jobs:
     type: shared
     lazy: true
+
+ruby:
+  version: 1.9
+  compile_mode: jit
+  debug: false
+  interactive: false
+  profile_api: false

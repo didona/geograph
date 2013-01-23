@@ -18,8 +18,14 @@ group :assets do
 end
 
 group :development, :test do
-   gem 'torquebox'
    gem 'torquebox-server'
+end
+
+# Jruby + Torquebox specific gems
+group :torquebox, :production do
+  gem 'jruby-openssl', :platform => :jruby
+#  gem 'newrelic_rpm'
+  gem 'json-jruby'
 end
 
 gem 'jquery-rails', '2.0.2'
@@ -49,8 +55,8 @@ gem "jdbc-sqlite3"
 
 gem "devise", '< 2.0.0'
 
-gem "madmass",  :git => "git://github.com/algorithmica/madmass.git"
-#gem "madmass", :path => "~/dev/madmass"
+#gem "madmass",  :git => "git://github.com/algorithmica/madmass.git"
+gem "madmass", :path => "~/dev/madmass"
 
 #gem 'rcov', '0.9.11'
 #gem 'bundler','1.0.21'

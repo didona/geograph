@@ -31,3 +31,10 @@
 .rvmrc
 
 relaunch.sh
+
+lib/cloud_tm/jars/dap-framework-2.0.jar
+fenix-framework*
+
+old_relaunch.sh
+
+old_rmvc

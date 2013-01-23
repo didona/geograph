@@ -72,8 +72,7 @@ module CloudTm
       def all
         properties = FenixFramework.getDomainRoot.getApp.getProperties
         Rails.logger.debug "All properties are #{properties.inspect}"
-        Rails.logger.debug "Array of all properties is #{properties.to_a.inspect}"
-        return properties.to_a if properties
+        return [properties] if properties
         []
       end
 

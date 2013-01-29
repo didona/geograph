@@ -7,7 +7,7 @@ rm -rf ${JBOSS_HOME}/standalone/data/*
 rm -rf ${JBOSS_HOME}/standalone/deployments/*
 echo "" >  log/devlopement.log
 echo "" >  log/production.log
-socky -c socky_server.yml &
+#socky -c socky_server.yml &
 RAILS_ENV=production rake torquebox:deploy
 
 cd  ../geograph-agent-farm
@@ -17,4 +17,4 @@ RAILS_ENV=production rake torquebox:deploy["/farm"]
 
 cd ../geograph
 
-torquebox run
+torquebox run --clustered

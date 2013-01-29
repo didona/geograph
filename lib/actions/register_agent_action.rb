@@ -58,7 +58,7 @@ module Actions
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.data = {:agent_id => @agent.oid}
+      p.data = {:agent_id => @agent.getExternalId}
       Madmass.current_perception << p
     end
 

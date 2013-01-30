@@ -103,14 +103,14 @@ module CloudTm
         FenixFramework.getDomainObject(id)
       end
 
-      def create_with_root attrs = {}, &block
-        create_without_root(attrs) do |instance|
+      #def create_with_root attrs = {}, &block
+      #  create_without_root(attrs) do |instance|
           # instance.set_root manager.getRoot
-        end
-      end
+      #  end
+      #end
 
 
-      alias_method_chain :create, :root
+      #alias_method_chain :create, :root
 
       #CHECKME
 

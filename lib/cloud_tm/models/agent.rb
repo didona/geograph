@@ -38,31 +38,20 @@ module CloudTm
     end
 
     class << self
-      #uses the one of CloudTm::Agent.findByUser
-      #TODO handle missing users (if needed); see following example
-
-      #def find_by_user(uid)
-      #  agent = XXX
-      #
-      #  unless agent
-      #    raise Madmass::Errors::RollbackError.new("Agent for user #{uid} not found! Retrying.")
-      #  end
-      #
-      #  agent
-      #end
 
       def find_by_id(id)
         FenixFramework.getDomainObject(id)
       end
 
 
-      def create_with_root attrs = {}, &block
-        create_without_root(attrs) do |instance|
-          FenixFramework.getDomainRoot().getApp.add_agents instance
-        end
+      def create attrs = {}, &block
+        instance = super
+        Rails.logger.debug "[Model::CreateWithRoot] invoked "
+        FenixFramework.getDomainRoot().getApp.add_agents instance
+        instance
       end
 
-      alias_method_chain :create, :root
+      #alias_method_chain :create, :root
 
       def all
         FenixFramework.getDomainRoot().getApp.getAgents

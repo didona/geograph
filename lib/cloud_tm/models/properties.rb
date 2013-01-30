@@ -60,14 +60,12 @@ module CloudTm
         return properties
       end
 
-      def create_with_root attrs = {}, &block
-        #Rails.logger.debug "root methods: #{manager.getRoot.methods.inspect}"
-        create_without_root(attrs) do |instance|
-          FenixFramework.getDomainRoot().getApp.properties = instance
-        end
+      def create attrs = {}, &block
+        instance = super
+        FenixFramework.getDomainRoot().getApp.properties = instance
+        instance
       end
 
-      alias_method_chain :create, :root
 
       def all
         properties = FenixFramework.getDomainRoot.getApp.getProperties

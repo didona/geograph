@@ -40,7 +40,7 @@ module Actions
 
     def initialize params
       super
-      @clients << Madmass.current_agent.id
+     # @clients << Madmass.current_agent.id
     end
 
 

@@ -8,5 +8,5 @@ echo "my addresss" $MYIP
 sed -i".bak" '/madmass-node/d' /etc/hosts
 echo "$MYIP madmass-node" >> /etc/hosts
 
-
+cd /opt/geograph
 torquebox run --clustered --bind-address $MYIP

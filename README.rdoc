@@ -25,8 +25,9 @@ In order to run the application follow these steps:
 7. Add to your /etc/hosts the host madmass-node with your ip-address.
 8. Deploy the application into TorqueBox by executing this command in the project folder:
     jruby -S rake torquebox:deploy
-9. Run TorqueBox:
+9. Install the agent-farm (see here[https://github.com/algorithmica/geograph-agent-farm])
+10. Run TorqueBox from the geograph folder:
     jruby -S rake torquebox:run
-10. Run the Socky Websockets server by executing this command in the project folder:
+11. Run the Socky Websockets server by executing this command in the project folder:
     jruby -S socky -c socky_server.yml
-11. Open the browser at http://localhost:8080, signup and you will see the Geograph map.
+12. Open the browser at http://localhost:8080, signup and you will see the Geograph map.

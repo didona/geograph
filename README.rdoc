@@ -27,7 +27,7 @@ In order to run the application follow these steps:
     jruby -S rake torquebox:deploy
 9. Install the agent-farm (see here[https://github.com/algorithmica/geograph-agent-farm])
 10. Run TorqueBox from the geograph folder:
-    jruby -S rake torquebox:run
+    ./scripts/dev_launch.sh
 11. Run the Socky Websockets server by executing this command in the project folder:
     jruby -S socky -c socky_server.yml
 12. Open the browser at http://localhost:8080, signup and you will see the Geograph map.

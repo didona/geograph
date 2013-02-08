@@ -1,24 +1,11 @@
-# SQLite version 3.x
-#   gem 'activerecord-jdbcsqlite3-adapter'
-#
-# Configure Using Gemfile
-# gem 'activerecord-jdbcsqlite3-adapter'
-#
-#development:
-#  adapter: sqlite3
-#  database: db/development.sqlite3
-#  pool: 20
-#  timeout: 10000
-
 development:
-  adapter: jdbcmysql
-  reconnect: false
+  adapter: mysql
+  xa: false
   database: geograph_development
-  pool: 100
+  host: localhost
   username: root
   password: geograph
-  driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/geograph_development
+  encoding: utf8
 
 
 # Warning: The database defined as "test" will be erased and
@@ -28,12 +15,13 @@ test:
   adapter: sqlite3
   database: db/test.sqlite3
 
+
 production:
   adapter: mysql
   xa: false
-  database: agentfarm_production
-  host: localhost
-  username: root
-  password: geograph
+  database: geograph_production
+  host: 10.100.0.1
+  username: geograph
+  password: geograph_passwd
   encoding: utf8
 

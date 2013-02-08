@@ -38,3 +38,5 @@ fenix-framework*
 old_relaunch.sh
 
 old_rmvc
+
+db/schema.rb

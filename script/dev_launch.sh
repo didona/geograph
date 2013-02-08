@@ -6,17 +6,17 @@ killall -9 java
 rm -rf ${JBOSS_HOME}/standalone/tmp/*
 rm -rf ${JBOSS_HOME}/standalone/data/*
 rm -rf ${JBOSS_HOME}/standalone/deployments/*
-echo "" >  log/devlopement.log
+echo "" >  log/development.log
 echo "" >  log/production.log
 
 #socky -c socky_server.yml &
 rake torquebox:deploy
 
 cd  ../geograph-agent-farm
-echo "" >  log/devlopement.log
+echo "" >  log/development.log
 echo "" >  log/production.log
 rake torquebox:deploy["/farm"]
 
 cd ../geograph
 
-torquebox run
+torquebox run --clustered

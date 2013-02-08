@@ -6,16 +6,18 @@ European Commission under the Seventh Framework Programme for Research and Techn
 == Getting started
 
 In order to run the application follow these steps:
-1. Install TorqueBox v2.0.0.beta3 (download it here[http://torquebox.org/release/org/torquebox/torquebox-dist/2.0.0.beta3/torquebox-dist-2.0.0.beta3-bin.zip] and follow these[http://torquebox.org/documentation/current/installation.html] instructions).
+1. Install TorqueBox v2.3.0 (download it here[http://torquebox.org] and follow the install instructions).
 2. Clone the project from the git repository:
     git clone git://github.com/algorithmica/geograph.git
+3. If you did not already, add the cloud-tm modules to torquebox as described here[https://github.com/algorithmica/cloudtm-jboss-modules]
+4. Install the domain as described here[https://github.com/algorithmica/geograph-domain]
 3. Install the needed gem libraries: 
    open a shell,
    cd to the project folder
    and run
     jruby -S bundle install
-   <b>Note</b>: if you are on a linux machine you must add two gems to the Gemfile <em>before executing the bundle install</em>
-   open the Gemfile (in the root of the application) and add
+   <b>Note</b>: if you are on a linux machine you must add two gems to the Gemfile <em>before executing the bundle install.</em>
+   Open the Gemfile (in the root of the application) and add
     gem 'execjs'
     gem 'therubyrhino'
 4. Setup the database (make sure sqlite3 is installed):

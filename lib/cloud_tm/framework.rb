@@ -55,13 +55,19 @@ module CloudTm
 
       def init
         Madmass.transaction do
+          Rails.logger.debug "[framework/init] getting domain root"
           root = FenixFramework.getDomainRoot()
+          Rails.logger.debug "[framework/init] getting app"
           app = root.getApp()
           unless app
+            Rails.logger.debug "[framework/init] app does not exist"
             app = CloudTm::Root.new
             root.setApp(app)
+            Rails.logger.debug "[framework/init] ne app"
           end
+          Rails.logger.debug "[framework/init] before commit"
         end
+        Rails.logger.debug "[framework/init] after commit"
       end
 
     end

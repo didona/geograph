@@ -32,6 +32,7 @@ begin
   # loading the Fenix Framework
   Madmass.logger.debug "[initializers/cloud_tm] Initializing Framework"
   CloudTm::Framework.init
+  Madmass.logger.debug "[initializers/cloud_tm] Framework Initialized"
 rescue Exception => ex
   Rails.logger.error "Cannot load Cloud-TM Framework: #{ex}"
   Rails.logger.error ex.backtrace.join("\n")

@@ -44,6 +44,10 @@ module Actions
     # the action effects.
     def execute
       agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
+      unless agent
+      Rails.logger.debug("Did not find agent to destroy. User is: #{@parameters[:user][:id]}")
+      return
+      end
       #destroy agent
       agent.destroy
 

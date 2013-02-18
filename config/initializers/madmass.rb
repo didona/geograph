@@ -41,4 +41,5 @@ Madmass.setup do |config|
   #config.perception_sender = :"Madmass::Comm::JmsSender"
 
   Madmass::Utils::InstallConfig.init
+  Madmass.logger.debug "Madmass::Utils::InstallConfig.init completed"
 end

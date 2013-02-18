@@ -23,7 +23,10 @@ In order to run the application follow these steps:
 6. Setup the database (make sure sqlite3 is installed):
     jruby -S rake db:setup
 7. Add to your /etc/hosts the host madmass-node with your ip-address.
-8. Install the agent-farm (see here[https://github.com/algorithmica/geograph-agent-farm])
-9. Run TorqueBox from the geograph folder:
+8. Add to the file bin/standalone.conf in your jboss home:
+  > JAVA_OPTS="$JAVA_OPTS -Djboss.bind.address=madmass-node"
+9. Install the agent-farm (see here[https://github.com/algorithmica/geograph-agent-farm])
+10. Run TorqueBox from the geograph folder:
     ./scripts/dev_launch.sh
-10. Open the browser at http://madmass-node:8080, signup and you will see the Geograph map.
+11. Open the browser at http://madmass-node:8080, signup and you will see the Geograph map.
+12. Open the browser at http://madmass-node:8080/farm, signup and you will see the Geograph Agent Farm console.

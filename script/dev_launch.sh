@@ -9,7 +9,6 @@ rm -rf ${JBOSS_HOME}/standalone/deployments/*
 echo "" >  log/development.log
 echo "" >  log/production.log
 
-#socky -c socky_server.yml &
 rake torquebox:deploy
 
 cd  ../geograph-agent-farm

@@ -21,7 +21,7 @@ class GeoObject {
 
 class Agent extends GeoObject{
   String status;
-  {"unique":true} String user;
+  String user;
 }
 
 class Post  extends GeoObject{
@@ -62,7 +62,10 @@ relation DomainRootHasRoot {
 
 relation RootHasAgent {
     Root playsRole;  //For unidirectional write no role name
-    Agent playsRole agents { multiplicity *; }
+    Agent playsRole agents {
+        multiplicity *;
+        indexed by user;
+    }
 }
 
 relation RootHasProperties {

@@ -48,7 +48,7 @@ class Actions::PostAction < Madmass::Action::Action
   # the action effects.
   def execute
 
-    @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
+    @agent = CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
 
     @geo_post = CloudTm::Post.create
     @geo_post.update_attributes(

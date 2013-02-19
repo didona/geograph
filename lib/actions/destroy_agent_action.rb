@@ -43,7 +43,8 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
-      agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
+      agent = CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
+      #agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
       unless agent
       Rails.logger.debug("Did not find agent to destroy. User is: #{@parameters[:user][:id]}")
       return

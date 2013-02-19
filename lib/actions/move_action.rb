@@ -53,7 +53,8 @@ module Actions
       Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
 
 
-      @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
+      @agent =  CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
+
 
 
       @agent.update_attributes(

@@ -46,7 +46,7 @@ module Actions
     # the action effects.
     def execute
       Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
-      @agent = CloudTm::Agent.find_by_user @parameters[:user][:id]
+      @agent = CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
       unless @agent
         Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")
         @agent = CloudTm::Agent.create :user => @parameters[:user][:id], :type => @parameters[:type]

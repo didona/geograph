@@ -1,15 +1,14 @@
 <%= register_websocket(:channels => ["all"], :client => current_user.id) %>
 
-<h1 style="text-align: center;">GeoGraph Monitor</h1>
-
-<div id="refresh-container">
+<div class="refresh-control">
+<div id="refresh-container" class="refresh-button">
   <%= button_tag "start refresh", :id => 'refresh-button', :onclick => "switchRefresh();" %>
 </div>
-
-<div id="refresh-slider-container" style="width: 300px; margin: 5px auto 20px auto;">
+<div id="refresh-slider-container">
   <label for="name">refresh time: <span id="refresh-label">5</span> (sec)</label>
   <%= hidden_field_tag "refresh_time" %>
   <div class="refresh-slider slider" rel="new"></div>
+</div>
 </div>
 
 <div id="map_canvas" style="width:1024px; height:768px; margin: 0 auto;"></div>

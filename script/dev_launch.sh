@@ -9,13 +9,16 @@ rm -rf ${JBOSS_HOME}/standalone/deployments/*
 echo "" >  log/development.log
 echo "" >  log/production.log
 
-rake torquebox:deploy
+torquebox deploy
+
+torquebox run --clustered &> torquebox.log &
 
 cd  ../geograph-agent-farm
 echo "" >  log/development.log
 echo "" >  log/production.log
-rake torquebox:deploy["/farm"]
 
-cd ../geograph
+sleep 20
 
-torquebox run --clustered
+torquebox deploy --context-path=/farm
+
+#cd ../geograph

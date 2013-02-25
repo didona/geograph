@@ -1,21 +1,27 @@
----
 development:
-  adapter: mysql
+  adapter: jdbcmysql
   database: geograph_development
-  host: localhost
+  reconnect: false
+  pool: 20
   username: root
   password: geograph
-  encoding: utf8
 
 test:
-  adapter: sqlite3
-  database: db/test.sqlite3
+  adapter: jdbcmysql
+  database: geograph_test
+  reconnect: false
+  pool: 20
+  username: root
+  password: geograph
+
 
 production:
-  adapter: mysql
+  adapter: jdbcmysql
   database: geograph_production
   host: 10.100.0.1
-  username: geograph
-  password: geograph_passwd
-  encoding: utf8
+  reconnect: false
+  pool: 20
+  username: root
+  password: geograph
+
 

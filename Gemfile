@@ -50,7 +50,6 @@ gem "socky-client-rails", "0.4.5"
 gem "jdbc-mysql"
 gem 'activerecord-jdbcmysql-adapter'
 gem "activerecord-jdbc-adapter"
-gem "jdbc-sqlite3"
 
 
 gem "devise", '< 2.0.0'

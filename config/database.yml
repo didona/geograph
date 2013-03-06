@@ -16,12 +16,12 @@ test:
 
 
 production:
-  adapter: jdbcmysql
+  adapter: mysql
+  xa: false
   database: geograph_production
   host: 10.100.0.1
-  reconnect: false
-  pool: 20
-  username: root
-  password: geograph
+  username: geograph
+  password: geograph_passwd
+  encoding: utf8
 
 

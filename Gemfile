@@ -51,6 +51,8 @@ gem "jdbc-mysql"
 gem 'activerecord-jdbcmysql-adapter'
 gem "activerecord-jdbc-adapter"
 
+gem 'execjs'
+gem 'therubyrhino'
 
 gem "devise", '< 2.0.0'
 

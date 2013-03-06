@@ -1,10 +1,12 @@
 #!/bin/bash
 
+killall -9 java
+
 touch /tmp/prod_launch.log
 echo "" > /tmp/prod_launch.log
-echo "" > /opt/geograh/nohup.out
+echo "" > /opt/geograph/nohup.out
 
-killall -9 java
+
 MYIP=$(/sbin/ifconfig eth0 | grep "inet " | awk -F: '{print $1}'| awk '{print $2}')
 echo "my addresss" $MYIP
 

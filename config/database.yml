@@ -12,14 +12,12 @@
 
 development:
   adapter: jdbcmysql
-  reconnect: false
+  reconnect: true
   database: geograph_development
   pool: 100
+  host: localhost
   username: root
-  password: geograph
-  driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/geograph_development
-
+  password: hokuto
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -31,9 +29,10 @@ test:
 production:
   adapter: mysql
   xa: false
-  database: agentfarm_production
+  reconnect: true
+  database: geograph_prod
   host: localhost
   username: root
-  password: geograph
+  password: hokuto
   encoding: utf8
 

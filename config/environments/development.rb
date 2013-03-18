@@ -58,5 +58,5 @@ Geograph::Application.configure do
   config.assets.debug = true
 
   #Available levels :debug, :info, :warn, :error, and :fatal
-  config.log_level = :debug
+  config.log_level = :warn
 end

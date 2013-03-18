@@ -31,7 +31,7 @@ echo "" >  log/production.log
 torquebox deploy --env=production
 
 
-nohup torquebox run --clustered --bind-address $MYIP &
+nohup torquebox run --clustered --bind-address $MYIP --jvm-options -Djboss.bind.address.management=$MYIP
 
 cd  ../geograph-agent-farm
 echo "" >  log/development.log
@@ -40,3 +40,9 @@ echo "" >  log/production.log
 sleep 20
 
 torquebox deploy --context-path=/farm --env=production
+
+cd ../wpm
+
+/run_log_service.sh &> logservice.log &
+./run_cons_prod.sh
+

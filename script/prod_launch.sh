@@ -31,7 +31,7 @@ echo "" >  log/production.log
 torquebox deploy --env=production
 
 
-nohup torquebox run --clustered --bind-address $MYIP --jvm-options -Djboss.bind.address.management=$MYIP
+nohup torquebox run --clustered --bind-address $MYIP --jvm-options -Djboss.bind.address.management=$MYIP &
 
 cd  ../geograph-agent-farm
 echo "" >  log/development.log

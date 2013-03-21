@@ -54,8 +54,8 @@ module Actions
       # FIXME: put this control in the applicable? pattern
       if @agent
         @agent.update_attributes(
-          :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
-          :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
+          :latitude => BigDecimal.new(@parameters[:latitude]),
+          :longitude => BigDecimal.new(@parameters[:longitude]),
           :body => @parameters[:data][:body],
           :type => @parameters[:data][:type]
         )

@@ -29,8 +29,8 @@
 
 require 'java'
 
-BigDecimal = java.math.BigDecimal #unless defined?(BigDecimal)
-RoundingMode = java.math.RoundingMode #unless defined?(RoundingMode)
+BigDecimal = java.math.BigDecimal
+RoundingMode = java.math.RoundingMode
 
 class BigDecimal
 

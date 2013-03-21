@@ -52,8 +52,8 @@ module Actions
       attrs = @parameters.clone
       data = attrs.delete(:data)
       attrs.merge!(data)
-      attrs[:latitude] = java.math.BigDecimal.new(attrs[:latitude])
-      attrs[:longitude] = java.math.BigDecimal.new(attrs[:longitude])
+      attrs[:latitude] = BigDecimal.new(attrs[:latitude])
+      attrs[:longitude] = BigDecimal.new(attrs[:longitude])
       @geo_object = CloudTm::GeoObject.create(attrs)
       Rails.logger.debug "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
       Rails.logger.debug "CREATE AGENT ACTION"

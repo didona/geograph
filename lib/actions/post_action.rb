@@ -52,8 +52,8 @@ class Actions::PostAction < Madmass::Action::Action
     if @agent
       @geo_post = CloudTm::Post.create
       @geo_post.update_attributes(
-        :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
-        :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
+        :latitude => BigDecimal.new(@parameters[:latitude]),
+        :longitude => BigDecimal.new(@parameters[:longitude]),
         :body => @parameters[:data][:body],
         :type => @parameters[:data][:type]
       )

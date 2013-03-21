@@ -27,7 +27,6 @@
 ###############################################################################
 ###############################################################################
 
-require File.join(Rails.root, 'lib', 'big_decimal')
 
 # Haversine formula to compute the great circle distance between two points given their latitude and longitudes
 # PI = 3.1415926535

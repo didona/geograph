@@ -40,8 +40,8 @@ class Actions::ReadPostAction < Madmass::Action::Action
 
   # the action effects.
   def execute
-    lat = java.math.BigDecimal.new(@parameters[:latitude])
-    lon  = java.math.BigDecimal.new(@parameters[:longitude])
+    lat = BigDecimal.new(@parameters[:latitude])
+    lon  = BigDecimal.new(@parameters[:longitude])
     @posts_read = []
     landmark = CloudTm::Landmark.find_by_coordinates(lat, lon)
     if landmark

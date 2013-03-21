@@ -43,6 +43,33 @@ class HomeController < ApplicationController
     @edges = geo_objects_in_cache.map(&:edges_for_percept).flatten.reject{|x| x == nil}.to_json #FIXME
   end
 
+  def landmarks_map
+    @landmarks = CloudTm::Landmark.all
+    geo_objects = []
+    edges = []
+    @landmarks.each do |land| 
+      land.geoObjects.each do |geo| 
+        geo_objects << geo 
+        
+        edges << {
+          :from => {
+            :id => land.externalId,
+            :latitude => land.latitude.to_s,
+            :longitude => land.longitude.to_s
+          }, 
+          :to => {
+            :id => geo.externalId,
+            :latitude => geo.latitude.to_s,
+            :longitude => geo.longitude.to_s
+          }
+        }
+      end
+    end
+    @geo_objects = geo_objects.to_dml_json
+    @landmarks_objects = @landmarks.to_dml_json
+    @edges = edges.to_json
+  end
+
   private
 
   def transact

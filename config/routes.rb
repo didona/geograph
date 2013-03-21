@@ -30,6 +30,7 @@
 Geograph::Application.routes.draw do
   match 'actions', :to => 'actions#execute', :via => [:post]
   match 'map', :to => 'home#map', :via => [:get]
+  match 'landmarks_map', :to => 'home#landmarks_map', :via => [:get]
 
   devise_for :users
 

@@ -47,18 +47,19 @@ class Actions::PostAction < Madmass::Action::Action
 
   # the action effects.
   def execute
-
     @agent = CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
-
-    @geo_post = CloudTm::Post.create
-    @geo_post.update_attributes(
-      :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
-      :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
-      :body => @parameters[:data][:body],
-      :type => @parameters[:data][:type]
-    )
-    @agent.addPosts(@geo_post)
-    @geo_post.compute_neighbours "action"
+    # FIXME: put this control in the applicable? pattern
+    if @agent
+      @geo_post = CloudTm::Post.create
+      @geo_post.update_attributes(
+        :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
+        :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
+        :body => @parameters[:data][:body],
+        :type => @parameters[:data][:type]
+      )
+      @agent.addPosts(@geo_post)
+      CloudTm::Landmark.add_geo_object(@geo_post)
+    end
   end
 
   # the perception content.

@@ -18,12 +18,12 @@ queues:
 
 
 
-jobs:
-   edges.processor:
-     job:  EdgesProcessor
-     cron: '*/30 * * * * ?'
-     description:  Process edges for all geo objects
-     singleton: true
+#jobs:
+#   edges.processor:
+#     job:  EdgesProcessor
+#     cron: '*/30 * * * * ?'
+#     description:  Process edges for all geo objects
+#     singleton: true
 
 #stomp:
 #  stomplets:

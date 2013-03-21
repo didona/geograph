@@ -1,0 +1,30 @@
+<%#= register_websocket(:channels => ["all"], :client => current_user.id) %>
+
+<div class="refresh-control">
+<div id="refresh-container" class="refresh-button">
+  <%= button_tag "start refresh", :id => 'refresh-button', :onclick => "switchRefresh();" %>
+</div>
+<div id="refresh-slider-container">
+  <label for="name">refresh time: <span id="refresh-label">5</span> (sec)</label>
+  <%= hidden_field_tag "refresh_time" %>
+  <div class="refresh-slider slider" rel="new"></div>
+</div>
+</div>
+
+<div id="map_canvas" style="width:1024px; height:768px; margin: 0 auto;"></div>
+
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCXQO2oj9QzIl0RGXzDCO-JTa2j--FbVNg&sensor=true"></script>
+<script type="text/javascript">  
+  var _geoObjects = null;
+  
+  $(document).ready(function() {
+    $("#refresh-button").button();
+    slideRefresh()
+
+    initializeMap();
+    
+    addGeoObjects(<%= @geo_objects.html_safe %>);
+    addGeoObjects(<%= @landmarks_objects.html_safe %>);
+    addEdges(<%= @edges.html_safe %>);
+  });
+</script>

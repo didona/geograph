@@ -55,7 +55,9 @@ module Actions
       attrs[:latitude] = java.math.BigDecimal.new(attrs[:latitude])
       attrs[:longitude] = java.math.BigDecimal.new(attrs[:longitude])
       @geo_object = CloudTm::GeoObject.create(attrs)
-
+      Rails.logger.debug "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
+      Rails.logger.debug "CREATE AGENT ACTION"
+      Rails.logger.debug "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
     end
 
 

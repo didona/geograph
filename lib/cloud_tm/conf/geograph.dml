@@ -45,6 +45,11 @@ class Properties {
   Integer distance;
 }
 
+class Landmark extends GeoObject {
+  Integer x;
+  Integer y;
+  String cell;
+}
 
 class Root { // This is the root domain object
     boolean loaded;         // auxiliary slot for the bootstrap sequence
@@ -94,10 +99,21 @@ relation PlaceHasPost { //add posts must use closed simulation to avoid conflict
     Post playsRole posts { multiplicity *; }
 }
 
-relation GeoObjectHasGeoObject{
+relation GeoObjectHasGeoObject {
   GeoObject playsRole neighbours { multiplicity *; }
   GeoObject playsRole; // this is IMPORTANT!!! :-)
 }
 
+relation RootHasLandmarks {
+  Root playsRole;
+  Landmark playsRole landmarks { 
+    multiplicity *; 
+    indexed by cell;
+  }
+}
 
+relation LandmarkHasGeoObjects {
+  Landmark playsRole landmark;
+  GeoObject playsRole geoObjects { multiplicity *; }
+}
 

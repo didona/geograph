@@ -40,20 +40,12 @@ class Actions::ReadPostAction < Madmass::Action::Action
 
   # the action effects.
   def execute
-
     lat = java.math.BigDecimal.new(@parameters[:latitude])
     lon  = java.math.BigDecimal.new(@parameters[:longitude])
-
     @posts_read = []
-
-    dist = CloudTm::Properties.current ? CloudTm::Properties.current.distance : 850
-
-    CloudTm::GeoObject.all.each do |post_obj|
-      next if post_obj.type != "Post"
-      if HaversineDistance.calculate(lat, lon, post_obj.latitude, post_obj.longitude) <= dist #FIXME @enabled_job.distance
-        @posts_read << post_obj
-        break #read just one post
-      end
+    landmark = CloudTm::Landmark.find_by_coordinates(lat, lon)
+    if landmark
+      @posts_read = landmark.geoObjects.select{|obj| obj.type == 'Post'}
     end
   end
 

@@ -4,7 +4,7 @@ development:
   reconnect: false
   pool: 20
   username: root
-  password: geograph
+  password: hokuto
 
 test:
   adapter: jdbcmysql
@@ -14,14 +14,10 @@ test:
   username: root
   password: geograph
 
-
 production:
   adapter: mysql
-  xa: false
-  database: geograph_production
-  host: 10.100.0.1
-  username: geograph
-  password: geograph_passwd
+  database: geograph_development
+  host: localhost
+  username: root
+  password: hokuto
   encoding: utf8
-
-

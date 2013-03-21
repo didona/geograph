@@ -69,6 +69,10 @@ module CloudTm
 
     end
 
+    def id
+      getExternalId
+    end
+
     def update_attributes attrs = {}
       attrs.each do |property, value|
         send("#{property}=", value)

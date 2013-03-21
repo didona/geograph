@@ -29,7 +29,8 @@
 
 require 'java'
 
-BigDecimal = java.math.BigDecimal
+BigDecimal = java.math.BigDecimal #unless defined?(BigDecimal)
+RoundingMode = java.math.RoundingMode #unless defined?(RoundingMode)
 
 class BigDecimal
 
@@ -50,6 +51,10 @@ class BigDecimal
   end
 
   def /(other)
-    self.divide(other)
+    self.divide(other, 10, RoundingMode::HALF_EVEN)
+  end
+
+  def %(other)
+    self.remainder(other)
   end
 end

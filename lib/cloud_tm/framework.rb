@@ -46,9 +46,7 @@ $CLASSPATH << CLOUDTM_CONF_PATH
 
 module CloudTm
 
-  #Init = Java::OrgCloudtmFramework::Init
   FenixFramework = Java::PtIstFenixframework::FenixFramework
-  #Config = Java::OrgCloudtmFramework::CloudtmConfig
 
   class Framework
     class << self
@@ -82,6 +80,7 @@ CloudTm::Properties = Java::ItAlgoGeographDomain::Properties
 CloudTm::Post = Java::ItAlgoGeographDomain::Post
 CloudTm::Place = Java::ItAlgoGeographDomain::Place
 CloudTm::Comment = Java::ItAlgoGeographDomain::Comment
+CloudTm::Landmark = Java::ItAlgoGeographDomain::Landmark
 CloudTm::Root = Java::ItAlgoGeographDomain::Root
 
 Dir[File.join(CLOUDTM_PATH, '*.rb')].each { |ruby|

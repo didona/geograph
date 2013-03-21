@@ -50,21 +50,17 @@ module Actions
     # [MANDATORY] Override this method in your action to define
     # the action effects.
     def execute
-      Madmass.logger.debug("Executing move action with parameters #{@parameters.inspect}")
-
-
       @agent =  CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
-
-
-
-      @agent.update_attributes(
-        :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
-        :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
-        :body => @parameters[:data][:body],
-        :type => @parameters[:data][:type]
-      )
-
-      @agent.compute_neighbours "action"
+      # FIXME: put this control in the applicable? pattern
+      if @agent
+        @agent.update_attributes(
+          :latitude => java.math.BigDecimal.new(@parameters[:latitude]),
+          :longitude => java.math.BigDecimal.new(@parameters[:longitude]),
+          :body => @parameters[:data][:body],
+          :type => @parameters[:data][:type]
+        )
+        CloudTm::Landmark.add_geo_object(@agent)
+      end
 
     end
 

@@ -32,7 +32,7 @@ module CloudTm
     include CloudTm::Model
 
     # Grid cell size in meters
-    CELL_SIZE = BigDecimal.new(10000)
+    CELL_SIZE = BigDecimal.new("5000")
     # The latitude and longitude size change
     # 0°  110.574 km  111.320 km
     # 15° 110.649 km  107.551 km
@@ -41,8 +41,8 @@ module CloudTm
     # 60° 111.412 km  55.800 km
     # 75° 111.618 km  28.902 km
     # 90° 111.694 km  0.000 km
-    LONGITUDE_SIZE = BigDecimal.new(111320)
-    LATITUDE_SIZE = BigDecimal.new(110574)
+    LONGITUDE_SIZE = BigDecimal.new("111320")
+    LATITUDE_SIZE = BigDecimal.new("110574")
 
     def attributes_to_hash
       {
@@ -97,21 +97,21 @@ module CloudTm
       end
 
       def normalize_longitude(longitude)
-        ((longitude + BigDecimal.new(180)) % BigDecimal.new(360) ) - BigDecimal.new(180)
+        ((longitude + BigDecimal.new("180")) % BigDecimal.new("360") ) - BigDecimal.new("180")
       end
 
       def normalize_latitude(latitude)
-        ((latitude + BigDecimal.new(90)) % BigDecimal.new(180) ) - BigDecimal.new(90)
+        ((latitude + BigDecimal.new("90")) % BigDecimal.new("180") ) - BigDecimal.new("90")
       end
 
       # The longitude of the cell. Is the cell center longitude.
       def longitude(cell)
-        (BigDecimal.new(cell[:x] + 0.5) * CELL_SIZE) / LONGITUDE_SIZE
+        ( ( BigDecimal.new(cell[:x]) + BigDecimal.new("0.5") )  * CELL_SIZE) / LONGITUDE_SIZE
       end
 
       # The latitude of the cell. Is the cell center latitude.
       def latitude(cell)
-        (BigDecimal.new(cell[:y] + 0.5) * CELL_SIZE) / LATITUDE_SIZE
+        ( ( BigDecimal.new(cell[:y]) + BigDecimal.new("0.5") ) * CELL_SIZE) / LATITUDE_SIZE
       end
 
       def add_geo_object(geo_object)

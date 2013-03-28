@@ -3,6 +3,7 @@ development:
   database: geograph_development
   reconnect: false
   pool: 20
+  xa: false
   username: root
   password: geograph
 

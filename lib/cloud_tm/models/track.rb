@@ -28,49 +28,35 @@
 ###############################################################################
 
 module CloudTm
-  class Properties
+  class Track
     include CloudTm::Model
 
-    def destroy
-      FenixFramework.getDomainRoot().getApp.removeProperties(self)
+    def attributes_to_hash
+      { 
+      	:id => getExternalId,
+      	:timestamp => timestamp
+      }
     end
 
-    def has_properties?(options)
-      options.each do |prop, value|
-        return false if send(prop) != value
-      end
-      true
+    def destroy
     end
 
     class << self
 
-      def current
-        FenixFramework.getDomainRoot.getApp.getProperties
-      end
-
-      def find_by_id(id)
-        FenixFramework.getDomainObject(id)
-      end
-
-      def where(options = {})
-        properties = []
-        all.each do |property|
-          properties << property if job.has_properties?(options)
-        end
-        return properties
-      end
+    	def factory attrs = {}
+    		instance = new
+    		instance.timestamp = java::util::Date.new
+    		instance
+    	end
 
       def create attrs = {}, &block
         instance = super
-        FenixFramework.getDomainRoot().getApp.properties = instance
+      	#### TODO  
         instance
       end
 
-
+      
       def all
-        properties = FenixFramework.getDomainRoot.getApp.getProperties
-        Rails.logger.debug "All properties are #{properties.inspect}"
-        return [properties] if properties
         []
       end
 

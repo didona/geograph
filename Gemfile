@@ -57,7 +57,7 @@ gem 'therubyrhino'
 gem "devise", '< 2.0.0'
 
 gem "madmass",  :git => "git://github.com/algorithmica/madmass.git"
-#gem "madmass", :path => "~/dev/madmass"
+#gem "madmass", :path => "../madmass"
 
 #gem 'rcov', '0.9.11'
 #gem 'bundler','1.0.21'

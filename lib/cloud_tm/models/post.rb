@@ -28,39 +28,35 @@
 ###############################################################################
 
 
-# This file is the implementation of the  CreateAction.
-# The implementation must comply with the action definition pattern
-# that is briefly described in the Madmass::Action::Action class.
+module CloudTm
+  class Post
+    include CloudTm::Model
 
-module Actions
-  class DestroyAgentAction < Madmass::Action::Action
-    action_params :user
-
-    def initialize params
-      super
+    def attributes_to_hash
+      {
+        :id => getExternalId,
+        :latitude => latitude.to_s,
+        :longitude => longitude.to_s,
+        :likes => likes,
+        :text => text,
+        :data => {:type => type, :body => body}
+      }
     end
 
-    # [MANDATORY] Override this method in your action to define
-    # the action effects.
-    def execute
-      agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
-      unless agent
-        Rails.logger.debug("Did not find agent to destroy. User is: #{@parameters[:user][:id]}")
-        return
+    def destroy
+    end
+
+    class << self
+      
+      def all
+        posts = []
+        CloudTm::Landmark.all.each do |landmark|
+          posts += landmark.getGeoObjects.to_a.select{|geo| geo.type == 'Post'}
+        end
+        Madmass.logger.debug "GeoObjects are #{posts.to_yaml}"
+        return posts
       end
-      #destroy agent
-      agent.destroy
-    end
 
-    # [MANDATORY] Override this method in your action to define
-    # the perception content.
-    def build_result
-      p = Madmass::Perception::Percept.new(self)
-      #p.add_headers({:topics => ['all']}) #who must receive the percept
-      #p.data =  {}
-      Madmass.current_perception << p
     end
-
   end
-
 end

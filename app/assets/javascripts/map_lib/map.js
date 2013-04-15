@@ -81,6 +81,8 @@ function addGeoObject(geoObject) {
     icon = '/assets/bike.png';
   } else if(geoObject.data.type == "Post") {
     icon = '/assets/post.png';
+  } else if(geoObject.data.type == "Track") {
+    icon = '/assets/track.png';
   } else if(geoObject.data.type == "Landmark") {
     //icon = '/assets/post.png';
   }
@@ -307,7 +309,8 @@ function edgeChanged(edgeA, edgeB) {
 function geoObjectChanged(goA, goB) {
   return(
     (goA.latitude != goB.latitude) ||
-      (goA.longitude != goB.longitude)
+      (goA.longitude != goB.longitude) || 
+      (goA.data.type != goB.data.type)
     );
 }
 
@@ -317,10 +320,10 @@ function refreshGeoObjects(freshGeoObjects) {
     //console.info("received from server:");
     //console.info(JSON.stringify(geoObject));
     var existingGeoObject = currentGeoObjects.get(geoObject.id);
-    // if the geoObject exists update its position if changed
+    // if the geoObject exists update its position if changed    
     if(existingGeoObject != null) {
       if(geoObjectChanged(existingGeoObject, geoObject)) {
-        destroyGeoObject(geoObject);
+        destroyGeoObject(existingGeoObject);
         addGeoObject(geoObject);
         currentGeoObjects[geoObject.id] = geoObject;
       }

@@ -66,6 +66,8 @@ module CloudTm
           Rails.logger.debug "[framework/init] before commit"
         end
         Rails.logger.debug "[framework/init] after commit"
+        # initialize the LocalityHints 
+        CloudTm::HintsInitializer::init
       end
 
     end
@@ -74,14 +76,19 @@ end
 
 # TODO: make this step dynamic
 # Load domain models
-CloudTm::GeoObject = Java::ItAlgoGeographDomain::GeoObject
-CloudTm::Agent = Java::ItAlgoGeographDomain::Agent
-CloudTm::Properties = Java::ItAlgoGeographDomain::Properties
-CloudTm::Post = Java::ItAlgoGeographDomain::Post
-CloudTm::Place = Java::ItAlgoGeographDomain::Place
-CloudTm::Comment = Java::ItAlgoGeographDomain::Comment
-CloudTm::Landmark = Java::ItAlgoGeographDomain::Landmark
-CloudTm::Root = Java::ItAlgoGeographDomain::Root
+CloudTm::GeoObject  = Java::ItAlgoGeographDomain::GeoObject
+CloudTm::Agent      = Java::ItAlgoGeographDomain::Agent
+CloudTm::Trackable  = Java::ItAlgoGeographDomain::Trackable
+CloudTm::Track      = Java::ItAlgoGeographDomain::Track
+CloudTm::Post       = Java::ItAlgoGeographDomain::Post
+CloudTm::Landmark   = Java::ItAlgoGeographDomain::Landmark
+CloudTm::Root       = Java::ItAlgoGeographDomain::Root
+
+# Load DEF (Distributed Execution Framework)
+CloudTm::DefaultExecutorService = Java::OrgInfinispanDistexec::DefaultExecutorService
+CloudTm::DistributedTask        = Java::ItAlgoGeographTasks::DistributedTask
+CloudTm::HintsInitializer       = Java::ItAlgoGeographTasks::HintsInitializer
+
 
 Dir[File.join(CLOUDTM_PATH, '*.rb')].each { |ruby|
   next if ruby.match(/framework\.rb/)
@@ -91,3 +98,4 @@ Dir[File.join(CLOUDTM_PATH, '*.rb')].each { |ruby|
 Dir[File.join(CLOUDTM_MODELS_PATH, '*.rb')].each { |model|
   require model
 }
+

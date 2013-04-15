@@ -27,7 +27,6 @@
 ###############################################################################
 ###############################################################################
 
-require 'haversine_distance'
 
 class Actions::ReadPostAction < Madmass::Action::Action
   action_params :latitude, :longitude, :user

@@ -49,6 +49,7 @@ class HomeController < ApplicationController
     edges = []
     @landmarks.each do |land| 
       land.geoObjects.each do |geo| 
+        #land.removeGeoObjects(geo)
         geo_objects << geo 
         
         edges << {
@@ -65,6 +66,19 @@ class HomeController < ApplicationController
         }
       end
     end
+    # get all agents tracks
+    agents = CloudTm::Trackable.all
+    agents.each do |agent|
+      next if(agent.class != CloudTm::Trackable)
+      agent.tracks.each do |track|
+        track.geo_objects.each do |geo_object|
+          if geo_object.type == 'Track'
+            geo_objects << geo_object 
+          end
+        end
+      end
+    end
+
     @geo_objects = geo_objects.to_dml_json
     @landmarks_objects = @landmarks.to_dml_json
     @edges = edges.to_json

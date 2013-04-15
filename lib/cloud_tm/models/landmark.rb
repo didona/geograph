@@ -56,20 +56,19 @@ module CloudTm
       }
     end
 
-    def to_json
-      attributes_to_hash.to_json
-    end
-
     def destroy
-      #FIXME do proper destroy, when DML supports it
-      FenixFramework.getDomainRoot().getApp.removeLandmarks(self)
+      domain_root.removeLandmarks(self)
     end
-
     
     class << self
 
-      def find_by_id(id)
-        CloudTm::FenixFramework.getDomainObject(id)
+      def locality_key
+        'landmark'
+      end
+
+      def locality_value(latitude, longitude)
+        cell = coordinates_to_cell(BigDecimal.new(latitude), BigDecimal.new(longitude))
+        cell_index(cell)
       end
 
       # Returns the landmark associated to the cell. 
@@ -82,7 +81,7 @@ module CloudTm
       # Returns the landmark associated to the cell. 
       # The cell is an hash like: {x: 23 , y: 12]
       def find_by_cell(cell)
-        CloudTm::FenixFramework.getDomainRoot().getApp().getLandmarksByCell(cell_index(cell))
+        domain_root.getLandmarksByCell(cell_index(cell))
       end
 
       def cell_index(cell)
@@ -101,7 +100,7 @@ module CloudTm
       end
 
       def normalize_latitude(latitude)
-        ((latitude + BigDecimal.new("90")) % BigDecimal.new("180") ) - BigDecimal.new("90")
+        ( ( latitude + BigDecimal.new("90")) % BigDecimal.new("180") ) - BigDecimal.new("90")
       end
 
       # The longitude of the cell. Is the cell center longitude.
@@ -115,6 +114,7 @@ module CloudTm
       end
 
       def add_geo_object(geo_object)
+        Rails.logger.warn "ADD GEO OBJECT"
         cell = coordinates_to_cell(geo_object.latitude, geo_object.longitude)
         landmark = CloudTm::Landmark.find_by_cell(cell)
         unless landmark
@@ -128,7 +128,9 @@ module CloudTm
             y: cell[:y],
             cell: cell_index,
             latitude: lat,
-            longitude: lon
+            longitude: lon,
+            locality_key: locality_key,
+            locality_value: cell_index
           )
         end
 
@@ -141,13 +143,13 @@ module CloudTm
 
       def create attrs = {}, &block
         instance = super
-        CloudTm::FenixFramework.getDomainRoot().getApp.addLandmarks instance
+        domain_root.addLandmarks instance
         instance
       end
 
 
       def all
-        FenixFramework.getDomainRoot().getApp.getLandmarks.to_a
+        domain_root.getLandmarks.to_a
       end
 
     end

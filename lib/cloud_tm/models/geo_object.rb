@@ -27,7 +27,6 @@
 ###############################################################################
 ###############################################################################
 
-require 'haversine_distance'
 
 module CloudTm
   class GeoObject
@@ -42,86 +41,29 @@ module CloudTm
       }
     end
 
-    def to_json
-      attributes_to_hash.to_json
-    end
-
     def destroy
-      #FIXME manager.getRoot.removeGeoObjects(self)
-    end
-
-
-    #just for action strategy
-    def compute_neighbours(strategy)
-      distance = edge_max_dist(strategy)
-      Rails.logger.debug "Request for computing neighbors with #{strategy} strategy and distance #{distance}"
-      return if(distance < 0)
-      Rails.logger.debug "Computing neighbors for #{strategy} strategy"
-      CloudTm::GeoObject.all.each do |geo_obj|
-        next if (self == geo_obj)
-        if (HaversineDistance.calculate(self.latitude, self.longitude, geo_obj.latitude, geo_obj.longitude) <= distance)
-          self.add_neighbours geo_obj
-          geo_obj.add_neighbours self
-        else
-          self.remove_neighbours geo_obj
-          geo_obj.remove_neighbours self
-        end
-      end
-    end
-
-
-    def edges_for_percept strategy = "any"
-      return nil if(edge_max_dist(strategy)<0)
-      edges = []
-      get_neighbours.each do |geo_obj|
-        edges << {:from => {
-          :id => self.getExternalId,
-          :latitude => self.latitude.to_s,
-          :longitude => self.longitude.to_s
-        }, :to => {
-          :id => geo_obj.getExternalId,
-          :latitude => geo_obj.latitude.to_s,
-          :longitude => geo_obj.longitude.to_s
-        }}
-      end
-      Madmass.logger.debug "New edges are #{edges.inspect}"
-      edges
-    end
-
-    def edge_max_dist(strategy)
-      properties = Properties.current
-      return -1 unless properties and properties.edge_processor_strategy
-      return -1 if (properties.edge_processor_strategy != strategy and strategy != "any")
-      #FIXME should not consider Blogger and Reader Agent
-      # return -1 if (self.type == BloggerAgent or self.type == ReaderAgent)
-      properties.distance
     end
 
     class << self
-
-      def find_by_id(id)
-        FenixFramework.getDomainObject(id)
-      end
-
-      #def create_with_root attrs = {}, &block
-      #  create_without_root(attrs) do |instance|
-          # instance.set_root manager.getRoot
+      
+      #def factory attrs = {}
+      #  if(attrs[:locality_key] and attrs[:locality_value])
+      #    instance = new new_locality_hint(attrs.delete(:locality_key), attrs.delete(:locality_value))
+      #  else
+      #    instance = new
       #  end
+      #  instance.latitude = attrs[:latitude]
+      #  instance.longitude = attrs[:longitude]
+      #  instance.body = attrs[:body]
+      #  instance.type = attrs[:type]
+      #  instance
       #end
-
-
-      #alias_method_chain :create, :root
-
-      #CHECKME
-
 
       def all
         geo_objects = []
-        agents = FenixFramework.getDomainRoot().getApp.getAgents.to_a
-        agents.each do |agent|
-          geo_objects += agent.getPosts.to_a
+        CloudTm::Landmark.all.each do |landmark|
+          geo_objects += landmark.getGeoObjects.to_a
         end
-        geo_objects += agents
         Madmass.logger.debug "GeoObjects are #{geo_objects.to_yaml}"
         return geo_objects
       end

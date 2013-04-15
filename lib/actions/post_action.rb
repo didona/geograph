@@ -36,39 +36,28 @@
 class Actions::PostAction < Madmass::Action::Action
   action_params :latitude, :longitude, :data, :user
 
-  # [OPTIONAL]  Add your initialization code here.
-  def initialize params
-    super
-    @geo_post = nil
-    # uncomment this to communicate via web sockets
-    #@channels << :all
-  end
-
 
   # the action effects.
   def execute
-    @agent = CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
-    # FIXME: put this control in the applicable? pattern
-    if @agent
-      @geo_post = CloudTm::Post.create
-      @geo_post.update_attributes(
-        :latitude => BigDecimal.new(@parameters[:latitude]),
-        :longitude => BigDecimal.new(@parameters[:longitude]),
-        :body => @parameters[:data][:body],
-        :type => @parameters[:data][:type]
-      )
-      @agent.addPosts(@geo_post)
-      CloudTm::Landmark.add_geo_object(@geo_post)
-    end
+    @geo_post = CloudTm::Post.create(
+      :latitude => BigDecimal.new(@parameters[:latitude]),
+      :longitude => BigDecimal.new(@parameters[:longitude]),
+      :body => @parameters[:data][:body],
+      :type => @parameters[:data][:type],
+      :locality_key => CloudTm::Landmark.locality_key,
+      :locality_value => CloudTm::Landmark.locality_value(@parameters[:latitude], @parameters[:longitude])
+    )
+    @agent.addPosts(@geo_post)
+    CloudTm::Landmark.add_geo_object(@geo_post)
   end
 
   # the perception content.
   def build_result
     p = Madmass::Perception::Percept.new(self)
     p.data = {
-      :geo_agent => @agent.getExternalId,
+      :geo_agent => @agent.id,
       :geo_object => {
-        :id => @geo_post.getExternalId,
+        :id => @geo_post.id,
         :latitude => @geo_post.latitude.to_s,
         :longitude => @geo_post.longitude.to_s,
         :data => {:body => @geo_post.body,
@@ -77,16 +66,19 @@ class Actions::PostAction < Madmass::Action::Action
       }
     }
 
-    if @geo_post
-      edges = @geo_post.edges_for_percept "action"
-      p.data[:edges] = edges if edges
-    end
-
-
-    Madmass.current_perception = []
     Madmass.current_perception << p
   end
 
-
+  def applicable?
+    @agent = CloudTm::Trackable.find_by_user(@parameters[:user][:id])
+    unless @agent
+      why_not_applicable.publish(
+        :name => :post_blog,
+        :key => 'action.post.blog',
+        :recipients => [@parameters[:user][:id]]
+      )
+    end
+    return why_not_applicable.empty?
+  end
 end
 

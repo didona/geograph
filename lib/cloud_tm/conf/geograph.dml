@@ -9,8 +9,24 @@ valueType java.math.BigDecimal as Decimal {
     }
 }
 
+valueType java.util.Date as Date {
+    externalizeWith {
+        String toString();
+    }
+}
 
 // DOMAIN OBJECTS
+
+class Agent {
+  String status;
+  String user;
+}
+
+class Trackable extends Agent {}
+
+class Track {
+  Date timestamp;
+}
 
 class GeoObject {
   String type;
@@ -19,17 +35,29 @@ class GeoObject {
   Decimal longitude;
 }
 
-class Agent extends GeoObject{
-  String status;
-  String user;
-}
-
 class Post  extends GeoObject{
   Integer likes;
   String text;
-  String user;
+  //String user;
 }
 
+class Landmark {
+  Integer x;
+  Integer y;
+  Decimal latitude;
+  Decimal longitude;
+  String type;
+  String body;
+  String cell;
+}
+
+class Root { // This is the root domain object
+    boolean loaded;         // auxiliary slot for the bootstrap sequence
+    Integer numAgentIds;    // for the generation of Agent ids
+    Integer numPropertiesIds; // FIXME is this the right way to do it?
+}
+
+/*
 class Place  extends GeoObject{
   String description;
   String user;
@@ -44,18 +72,8 @@ class Properties {
   String edge_processor_strategy; // job or action
   Integer distance;
 }
+*/
 
-class Landmark extends GeoObject {
-  Integer x;
-  Integer y;
-  String cell;
-}
-
-class Root { // This is the root domain object
-    boolean loaded;         // auxiliary slot for the bootstrap sequence
-    Integer numAgentIds;    // for the generation of Agent ids
-    Integer numPropertiesIds; // FIXME is this the right way to do it?
-}
 
 
 // RELATIONS
@@ -65,7 +83,8 @@ relation DomainRootHasRoot {
     Root playsRole app;
 }
 
-relation RootHasAgent {
+
+relation RootHasAgents {
     Root playsRole;  //For unidirectional write no role name
     Agent playsRole agents {
         multiplicity *;
@@ -73,17 +92,20 @@ relation RootHasAgent {
     }
 }
 
+/*
+
 relation RootHasProperties {
    Root playsRole;
    Properties playsRole properties { multiplicity 0..1; }
 }
+*/
 
-
-relation AgentHasPost { //add posts must use closed simulation to avoid conflicts
+relation AgentHasPosts { //add posts must use closed simulation to avoid conflicts
     Agent playsRole agent;
     Post playsRole posts { multiplicity *; }
 }
 
+/*
 relation AgentWroteComment { //add posts must use closed simulation to avoid conflicts
     Agent playsRole agent;
     Comment playsRole comments { multiplicity *; }
@@ -104,6 +126,8 @@ relation GeoObjectHasGeoObject {
   GeoObject playsRole; // this is IMPORTANT!!! :-)
 }
 
+*/
+
 relation RootHasLandmarks {
   Root playsRole;
   Landmark playsRole landmarks { 
@@ -117,3 +141,22 @@ relation LandmarkHasGeoObjects {
   GeoObject playsRole geoObjects { multiplicity *; }
 }
 
+relation TrackableHasTracks {
+  Trackable playsRole;
+  Track playsRole tracks { multiplicity *; }
+}
+
+relation TrackableHasCurrentTrack {
+  Trackable playsRole;
+  Track playsRole currentTrack;
+}
+
+relation TrackableHasCurrentPosition {
+  Trackable playsRole;
+  GeoObject playsRole currentPosition;
+}
+
+relation TrackHasGeoObjects {
+  Track playsRole track;
+  GeoObject playsRole geoObjects { multiplicity *; }
+}

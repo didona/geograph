@@ -32,29 +32,44 @@ module CloudTm
     include Madmass::Agent::Executor
     include CloudTm::Model
 
+    def attributes_to_hash
+      { 
+        :id => getExternalId,
+        :status => status,
+        :user => user
+      }
+    end
+
     def destroy
-      #FIXME do proper destroy, when DML supports it
-      FenixFramework.getDomainRoot().getApp.removeAgents(self)
+      domain_root.removeAgents(self)
     end
 
     class << self
 
-      def find_by_id(id)
-        FenixFramework.getDomainObject(id)
+      def factory attrs = {}
+        agent_type = attrs.delete(:type)
+        agent_klass = case agent_type
+        when 'trackable'
+          CloudTm::Trackable
+        else
+          CloudTm::Agent
+        end
+        agent_klass.create attrs
       end
-
 
       def create attrs = {}, &block
         instance = super
-        Rails.logger.debug "[Model::CreateWithRoot] invoked "
-        FenixFramework.getDomainRoot().getApp.add_agents instance
+        domain_root.add_agents instance
         instance
       end
 
-      #alias_method_chain :create, :root
 
       def all
-        FenixFramework.getDomainRoot().getApp.getAgents
+        domain_root.getAgents
+      end
+
+      def find_by_user(user)
+        domain_root.getAgentsByUser(user)
       end
 
     end

@@ -36,9 +36,9 @@ module CloudTm
 
     module ClassMethods
 
-      #def manager
-      #  CloudTm::FenixFramework.getTransactionManager
-      #end
+      def domain_root
+        FenixFramework.getDomainRoot().getApp
+      end
 
       def where(options = {})
         instances = []
@@ -48,25 +48,42 @@ module CloudTm
         return instances
       end
 
+      def find_by_id(id)
+        FenixFramework.getDomainObject(id)
+      end
+
       def all
-        #manager = CloudTm::FenixFramework.getTransactionManager
-        root = FenixFramework.getDomainRoot().getApp
-        result = root.getAgents
-        Madmass.logger.debug("All Agents #{result.inspect}")
-        return result
+        # must be implemented in the models
+        []
       end
 
       def create attrs = {}, &block
-        instance = new
+        Rails.logger.warn "CREATE FOR DML MODEL: #{attrs.inspect}"
+        if(attrs[:locality_key] and attrs[:locality_value])
+          Rails.logger.error "CloudTm::Model::create: with locality hints: key: #{attrs[:locality_key]} - value: #{attrs[:locality_value]}"
+          instance = new new_locality_hint(attrs.delete(:locality_key), attrs.delete(:locality_value))
+        else
+          instance = new
+        end
         attrs.each do |attr, value|
           instance.send("#{attr}=", value)
         end
-       # manager.save instance
+        # manager.save instance
         block.call(instance) if block_given?
-        Rails.logger.debug "Created Model #{instance.inspect} "
         instance
       end
 
+      def new_locality_hint(key, value)
+        constructor = Java::EuCloudtm::LocalityHints.java_class.constructor(java::lang::String[])
+        constructor.new_instance([key, value])
+      end
+
+    end
+
+    # Offers the access to the domain root for instances.
+    # Uses the class method with the same name.
+    def domain_root
+      self.class.domain_root
     end
 
     def id
@@ -86,6 +103,13 @@ module CloudTm
       true
     end
 
+    def to_json
+      attributes_to_hash.to_json
+    end
+
+    def new_locality_hint(key, value)
+      self.class.new_locality_hint(key, value)
+    end
 
   end
 end

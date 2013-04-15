@@ -36,37 +36,27 @@ module Actions
   class RegisterAgentAction < Madmass::Action::Action
     action_params :user, :data
 
-    def initialize params
-      super
-      # uncomment this to communicate via web sockets
-      #@channels << :all
-    end
-
 
     # the action effects.
     def execute
       Madmass.logger.debug("Executing register agent action with parameters #{@parameters.inspect}")
-      @agent = CloudTm::FenixFramework.getDomainRoot().getApp().getAgentsByUser(@parameters[:user][:id])
+      @agent = CloudTm::Agent.find_by_user(@parameters[:user][:id])
       unless @agent
         Madmass.logger.debug("User #{@parameters[:user][:id]} not found, creating new agent")
-        @agent = CloudTm::Agent.create( 
+        @agent = CloudTm::Agent.factory( 
           :user => @parameters[:user][:id], 
-          :type => @parameters[:type]
+          :type => @parameters[:data][:type]
         )
       end
-      @agent.compute_neighbours "action"
     end
 
     # [MANDATORY] Override this method in your action to define
     # the perception content.
     def build_result
       p = Madmass::Perception::Percept.new(self)
-      p.data = {:agent_id => @agent.getExternalId}
+      p.data = {:agent_id => @agent.id}
       Madmass.current_perception << p
     end
-
-
-
 
   end
 

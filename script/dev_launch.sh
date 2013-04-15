@@ -8,7 +8,8 @@ rm -rf ${JBOSS_HOME}/standalone/deployments/*
 echo "" >  log/development.log
 echo "" >  log/production.log
 
-jruby -S torquebox deploy
+#jruby -S torquebox deploy --env=production
+jruby -S torquebox deploy 
 
 jruby -S torquebox run --clustered &> torquebox.log &
 
@@ -18,6 +19,7 @@ echo "" >  log/production.log
 
 sleep 20
 
-jruby -S torquebox deploy --context-path=/farm
+#jruby -S torquebox deploy --context-path=/farm  --env=production
+jruby -S torquebox deploy --context-path=/farm 
 
 cd ../geograph

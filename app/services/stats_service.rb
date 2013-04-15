@@ -16,17 +16,18 @@ class StatsService
     until @done
     	
       begin
+        sleep(@sleep)
         def_task = CloudTm::DistributedExecutor.new
         landmarks_count = def_task.execute
-
-        sleep(@sleep)
+        Rails.logger.warn "Will sleep for: #{@sleep}"
 
         Rails.logger.warn "Landmarks count: #{landmarks_count}"
       rescue Exception => ex
-        Rails.logger.debug "StatsService exception: #{ex}"
+        Rails.logger.error "StatsService exception: #{ex} \n #{ex.backtrace.join('\\n')}"
       end
     
     end
+    Rails.logger.error "Benchmark service quitting"
 
   end
 

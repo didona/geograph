@@ -7,7 +7,7 @@ module CloudTm
 
 		def execute
 			task = CloudTm::DistributedTask.new("")
-			@executor.submitEverywhere(task).get
+			@executor.submitEverywhere(task)#.get
 		end
 
 	end

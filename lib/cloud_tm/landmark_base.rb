@@ -78,7 +78,7 @@ module CloudTm
       # The cell is an hash like: { x: 23 , y: 12 }
       def find_by_coordinates(latitude, longitude)
         cell = coordinates_to_cell(latitude, longitude)
-        find_by_cell(type, cell)
+        find_by_cell(cell)
       end
 
       # Returns the landmark associated to the cell. 
@@ -129,7 +129,7 @@ module CloudTm
           cell_index = cell_index(cell)
           lat = latitude(cell)
           lon = longitude(cell)
-          landmark = CloudTm::Landmark.create(type,
+          landmark = self.create(
             type: 'Landmark', 
             body: "cell: #{cell_index} - lat: #{lat} - lon: #{lon}",
             x: cell[:x], 

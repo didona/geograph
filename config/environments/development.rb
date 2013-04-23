@@ -55,8 +55,8 @@ Geograph::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = true
+  config.assets.debug = false
 
   #Available levels :debug, :info, :warn, :error, and :fatal
-  config.log_level = :warn
+  config.log_level = :debug
 end

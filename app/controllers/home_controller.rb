@@ -34,23 +34,23 @@ class HomeController < ApplicationController
   respond_to :html, :js
   
   def index
-    @geo_objects = CloudTm::GeoObject.all.to_dml_json
+    @locations = CloudTm::Location.all.to_dml_json
   end
 
   def map
-    geo_objects_in_cache = CloudTm::GeoObject.all
-    @geo_objects = geo_objects_in_cache.to_dml_json
-    @edges = geo_objects_in_cache.map(&:edges_for_percept).flatten.reject{|x| x == nil}.to_json #FIXME
+    locations_in_cache = CloudTm::Location.all
+    @locations = locations_in_cache.to_dml_json
+    @edges = locations_in_cache.map(&:edges_for_percept).flatten.reject{|x| x == nil}.to_json #FIXME
   end
 
   def landmarks_map
-    @landmarks = CloudTm::Landmark.all
-    geo_objects = []
+    @landmarks = CloudTm::PostLandmark.all + CloudTm::VenueLandmark.all + CloudTm::TrackableLandmark.all
+    locations = []
     edges = []
     @landmarks.each do |land| 
-      land.geoObjects.each do |geo| 
-        #land.removeGeoObjects(geo)
-        geo_objects << geo 
+      land.locations.each do |geo| 
+        #land.removeLocations(geo)
+        locations << geo 
         
         edges << {
           :from => {
@@ -71,15 +71,15 @@ class HomeController < ApplicationController
     agents.each do |agent|
       next if(agent.class != CloudTm::Trackable)
       agent.tracks.each do |track|
-        track.geo_objects.each do |geo_object|
-          if geo_object.type == 'Track'
-            geo_objects << geo_object 
+        track.locations.each do |location|
+          if location.type == 'Track'
+            locations << location 
           end
         end
       end
     end
 
-    @geo_objects = geo_objects.to_dml_json
+    @locations = locations.to_dml_json
     @landmarks_objects = @landmarks.to_dml_json
     @edges = edges.to_json
   end

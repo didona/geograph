@@ -29,13 +29,13 @@ function changeRefresh(time) {
 var map = null;
 var markers = new Hash();
 var infoWindows = {};
-var currentGeoObjects = new Hash();
+var currentLocations = new Hash();
 var currentEdges = new Hash();
 var currentCycle = 0;
 var mapEdges = new Hash();
 var mapCenterLat = 41.9;
 var mapCenterLng = 12.4;
-var infoWindowTemplate = '<div id="content-{GEOOBJECTID}"><h2 id="content-heading-{GEOOBJECTID}">{GEOOBJECTTYPE}</h2><div id="body-content-{GEOOBJECTID}">{GEOOBJECTDATA}</div></div>';
+var infoWindowTemplate = '<div id="content-{LOCATIONID}"><h2 id="content-heading-{LOCATIONID}">{LOCATIONTYPE}</h2><div id="body-content-{LOCATIONID}">{LOCATIONDATA}</div></div>';
 
 function initializeMap() {
   var latlng = new google.maps.LatLng(mapCenterLat, mapCenterLng);
@@ -48,42 +48,42 @@ function initializeMap() {
 
 }
 
-function addGeoObjects(geoObjects) {
-  geoObjects.each(function(geoObject) {
-    currentGeoObjects[geoObject.id] = geoObject;
-    addGeoObject(geoObject);
+function addLocations(locations) {
+  locations.each(function(location) {
+    currentLocations[location.id] = location;
+    addLocation(location);
   });
 }
 
-function addGeoObject(geoObject) {
+function addLocation(location) {
   //console.info("Received new geoobject:");
-  //console.info(JSON.stringify(geoObject));
-  if(geoObject == null || geoObject.data.type == null) {
-    console.warn("Invalid GeoObject, ignoring");
+  //console.info(JSON.stringify(location));
+  if(location == null || location.data.type == null) {
+    console.warn("Invalid Location, ignoring");
     return;
   }
-  //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
-  var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
+  //var latlng = new google.maps.LatLng(mapCenterLat + (location.latitude/100), mapCenterLng + (location.longitude/100));
+  var latlng = new google.maps.LatLng(location.latitude, location.longitude);
  // console.info("-----------");
 
-  markers[geoObject.id] = new google.maps.Marker({
+  markers[location.id] = new google.maps.Marker({
     position:latlng,
     map:map,
     //animation: google.maps.Animation.DROP,
-    title:"GeoObject: " + geoObject.id
+    title:"Location: " + location.id
   });
   // centerMap(latlng);
 
   //console.info("Added new marker:");
 
   var icon = null;
-  if(geoObject.data.type == "Mover") {
+  if(location.data.type == "Mover") {
     icon = '/assets/bike.png';
-  } else if(geoObject.data.type == "Post") {
+  } else if(location.data.type == "Post") {
     icon = '/assets/post.png';
-  } else if(geoObject.data.type == "Track") {
+  } else if(location.data.type == "Track") {
     icon = '/assets/track.png';
-  } else if(geoObject.data.type == "Landmark") {
+  } else if(location.data.type == "Landmark") {
     //icon = '/assets/post.png';
   }
 
@@ -92,60 +92,60 @@ function addGeoObject(geoObject) {
   }
 
   //console.info("Type checked");
-  if(icon != null) markers[geoObject.id].setIcon(icon);
+  if(icon != null) markers[location.id].setIcon(icon);
 
-  addInfoWindow(geoObject, markers[geoObject.id]);
+  addInfoWindow(location, markers[location.id]);
 }
 
-function addInfoWindow(geoObject, marker) {
-  var infoWindowContent = infoWindowSource(geoObject);
+function addInfoWindow(location, marker) {
+  var infoWindowContent = infoWindowSource(location);
   var infoWindow = new google.maps.InfoWindow({
     content:infoWindowContent
   });
   google.maps.event.addListener(marker, 'click', function() {
     infoWindow.open(map, marker);
   });
-  infoWindows[geoObject.id] = infoWindow;
+  infoWindows[location.id] = infoWindow;
 }
 
-function updateInfoWindow(geoObject) {
-  var infoWindowContent = infoWindowSource(geoObject);
-  infoWindows[geoObject.id].setContent(infoWindowContent);
+function updateInfoWindow(location) {
+  var infoWindowContent = infoWindowSource(location);
+  infoWindows[location.id].setContent(infoWindowContent);
 }
 
-function infoWindowSource(geoObject) {
-  var infoWindowContent = infoWindowTemplate.replace(/{GEOOBJECTID}/g, geoObject.id);
-  infoWindowContent = infoWindowContent.replace(/{GEOOBJECTTYPE}/g, geoObject.data['type']);
-  infoWindowContent = infoWindowContent.replace(/{GEOOBJECTDATA}/g, geoObject.data['body']);
+function infoWindowSource(location) {
+  var infoWindowContent = infoWindowTemplate.replace(/{LOCATIONID}/g, location.id);
+  infoWindowContent = infoWindowContent.replace(/{LOCATIONTYPE}/g, location.data['type']);
+  infoWindowContent = infoWindowContent.replace(/{LOCATIONDATA}/g, location.data['body']);
   return infoWindowContent;
 }
 
-function moveGeoObject(geoObject) {
-  //var latlng = new google.maps.LatLng(mapCenterLat + (geoObject.latitude/100), mapCenterLng + (geoObject.longitude/100));
-  var latlng = new google.maps.LatLng(geoObject.latitude, geoObject.longitude);
-  markers[geoObject.id].setPosition(latlng);
-  //markers[geoObject.id].setAnimation(google.maps.Animation.DROP);
-  //markers[geoObject.id].setAnimation(google.maps.Animation.BOUNCE);
-  //setTimeout(function() {markers[geoObject.id].setAnimation(null);}, 500);
+function moveLocation(location) {
+  //var latlng = new google.maps.LatLng(mapCenterLat + (location.latitude/100), mapCenterLng + (location.longitude/100));
+  var latlng = new google.maps.LatLng(location.latitude, location.longitude);
+  markers[location.id].setPosition(latlng);
+  //markers[location.id].setAnimation(google.maps.Animation.DROP);
+  //markers[location.id].setAnimation(google.maps.Animation.BOUNCE);
+  //setTimeout(function() {markers[location.id].setAnimation(null);}, 500);
   //centerMap(latlng);
 
-  updateInfoWindow(geoObject);
+  updateInfoWindow(location);
 }
 
-function destroyGeoObject(geoObject) {
-  if(markers.get(geoObject.id) == null) return;
-  markers[geoObject.id].setMap(null);
-  markers[geoObject.id] = null;
+function destroyLocation(location) {
+  if(markers.get(location.id) == null) return;
+  markers[location.id].setMap(null);
+  markers[location.id] = null;
 }
 
-function destroyGeoObjects(ids) {
+function destroyLocations(ids) {
   ids.each(function(_id) {
     markers[_id].setMap(null);
     markers[_id] = null;
   });
 }
 
-function destroyAllGeoObjects() {
+function destroyAllLocations() {
   markers.each(function(value, key) {
     value.setMap(null);
     value = null;
@@ -154,22 +154,22 @@ function destroyAllGeoObjects() {
 }
 
 function onPercept(perception) {
-  var geoObject = perception["data"];
+  var location = perception["data"];
 
   if(perception["header"]["action"] == "actions::destroy_action") {
-    destroyGeoObject(geoObject);
+    destroyLocation(location);
     return;
   }
 
   if(perception["header"]["action"] == "actions::destroy_posts_action") {
-    destroyGeoObjects(geoObject.ids);
+    destroyLocations(location.ids);
     return;
   }
 
-  if(markers[geoObject.id] != undefined) {
-    moveGeoObject(geoObject);
+  if(markers[location.id] != undefined) {
+    moveLocation(location);
   } else {
-    addGeoObject(geoObject);
+    addLocation(location);
   }
 }
 
@@ -306,7 +306,7 @@ function edgeChanged(edgeA, edgeB) {
     )
 }
 
-function geoObjectChanged(goA, goB) {
+function locationChanged(goA, goB) {
   return(
     (goA.latitude != goB.latitude) ||
       (goA.longitude != goB.longitude) || 
@@ -315,32 +315,32 @@ function geoObjectChanged(goA, goB) {
 }
 
 
-function refreshGeoObjects(freshGeoObjects) {
-  freshGeoObjects.each(function(geoObject) {
+function refreshLocations(freshLocations) {
+  freshLocations.each(function(location) {
     //console.info("received from server:");
-    //console.info(JSON.stringify(geoObject));
-    var existingGeoObject = currentGeoObjects.get(geoObject.id);
-    // if the geoObject exists update its position if changed    
-    if(existingGeoObject != null) {
-      if(geoObjectChanged(existingGeoObject, geoObject)) {
-        destroyGeoObject(existingGeoObject);
-        addGeoObject(geoObject);
-        currentGeoObjects[geoObject.id] = geoObject;
+    //console.info(JSON.stringify(location));
+    var existingLocation = currentLocations.get(location.id);
+    // if the location exists update its position if changed    
+    if(existingLocation != null) {
+      if(locationChanged(existingLocation, location)) {
+        destroyLocation(existingLocation);
+        addLocation(location);
+        currentLocations[location.id] = location;
       }
-      currentGeoObjects[geoObject.id]['exists_at_cycle'] = currentCycle;
+      currentLocations[location.id]['exists_at_cycle'] = currentCycle;
     } else {
       // if the geo object don't exists create it
-      addGeoObject(geoObject);
-      currentGeoObjects[geoObject.id] = geoObject;
-      currentGeoObjects[geoObject.id]['exists_at_cycle'] = currentCycle;
+      addLocation(location);
+      currentLocations[location.id] = location;
+      currentLocations[location.id]['exists_at_cycle'] = currentCycle;
     }
   });
 
   // remove geo objects that not exists in the fresh data
-  currentGeoObjects.each(function(geoObject, key) {
-    if(geoObject['exists_at_cycle'] < currentCycle) {
-      destroyGeoObject(geoObject);
-      currentGeoObjects.erase(key);
+  currentLocations.each(function(location, key) {
+    if(location['exists_at_cycle'] < currentCycle) {
+      destroyLocation(location);
+      currentLocations.erase(key);
     }
   });
   //    currentCycle++;

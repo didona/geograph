@@ -76,13 +76,15 @@ end
 
 # TODO: make this step dynamic
 # Load domain models
-CloudTm::GeoObject  = Java::ItAlgoGeographDomain::GeoObject
+CloudTm::Location   = Java::ItAlgoGeographDomain::Location
 CloudTm::Agent      = Java::ItAlgoGeographDomain::Agent
 CloudTm::Trackable  = Java::ItAlgoGeographDomain::Trackable
 CloudTm::Track      = Java::ItAlgoGeographDomain::Track
 CloudTm::Post       = Java::ItAlgoGeographDomain::Post
 CloudTm::Landmark   = Java::ItAlgoGeographDomain::Landmark
 CloudTm::Root       = Java::ItAlgoGeographDomain::Root
+CloudTm::Comment    = Java::ItAlgoGeographDomain::Comment
+CloudTm::Venue      = Java::ItAlgoGeographDomain::Venue
 
 # Load DEF (Distributed Execution Framework)
 CloudTm::DefaultExecutorService = Java::OrgInfinispanDistexec::DefaultExecutorService

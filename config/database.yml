@@ -4,7 +4,7 @@ development:
   reconnect: false
   pool: 20
   xa: false
-  username: root
+  username: geograph
   password: geograph
 
 test:

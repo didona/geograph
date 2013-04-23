@@ -40,15 +40,17 @@ class Actions::PostAction < Madmass::Action::Action
   # the action effects.
   def execute
     @geo_post = CloudTm::Post.create(
-      :latitude => BigDecimal.new(@parameters[:latitude]),
-      :longitude => BigDecimal.new(@parameters[:longitude]),
+      :locality_key => CloudTm::PostLandmark.locality_key,
+      :locality_value => CloudTm::PostLandmark.locality_value(@parameters[:latitude], @parameters[:longitude])
+    )
+    @geo_post.location = CloudTm::Location.create(
       :body => @parameters[:data][:body],
       :type => @parameters[:data][:type],
-      :locality_key => CloudTm::Landmark.locality_key,
-      :locality_value => CloudTm::Landmark.locality_value(@parameters[:latitude], @parameters[:longitude])
+      :latitude => BigDecimal.new(@parameters[:latitude]),
+      :longitude => BigDecimal.new(@parameters[:longitude])
     )
     @agent.addPosts(@geo_post)
-    CloudTm::Landmark.add_geo_object(@geo_post)
+    CloudTm::PostLandmark.add_location(@geo_post.location)
   end
 
   # the perception content.
@@ -56,12 +58,12 @@ class Actions::PostAction < Madmass::Action::Action
     p = Madmass::Perception::Percept.new(self)
     p.data = {
       :geo_agent => @agent.id,
-      :geo_object => {
+      :location => {
         :id => @geo_post.id,
-        :latitude => @geo_post.latitude.to_s,
-        :longitude => @geo_post.longitude.to_s,
-        :data => {:body => @geo_post.body,
-                  :type => @geo_post.type
+        :latitude => @geo_post.location.latitude.to_s,
+        :longitude => @geo_post.location.longitude.to_s,
+        :data => {:body => @geo_post.location.body,
+                  :type => @geo_post.location.type
         }
       }
     }

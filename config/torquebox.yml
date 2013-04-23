@@ -17,10 +17,10 @@ queues:
     durable: false
 
 
-services:
-  StatsService:
-    config:
-      sleep: 5
+#services:
+#  StatsService:
+#    config:
+#      sleep: 5
 
 #jobs:
 #   edges.processor:

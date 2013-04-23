@@ -49,13 +49,13 @@ module Actions
       end
 
       # create the agent position (aka geo object)
-      @geo_object = CloudTm::GeoObject.create(
+      @location = CloudTm::Location.create(
         :latitude => BigDecimal.new(@parameters[:latitude]),
         :longitude => BigDecimal.new(@parameters[:longitude]),
         :body => @parameters[:data][:body],
         :type => @parameters[:data][:type],
-        :locality_key => CloudTm::Landmark.locality_key,
-        :locality_value => CloudTm::Landmark.locality_value(@parameters[:latitude], @parameters[:longitude])
+        :locality_key => CloudTm::TrackableLandmark.locality_key,
+        :locality_value => CloudTm::TrackableLandmark.locality_value(@parameters[:latitude], @parameters[:longitude])
       )
 
       # remove the previous position from the landmark
@@ -63,18 +63,18 @@ module Actions
       if previous_position
         landmark = previous_position.landmark
         previous_position.type = 'Track'
-        landmark.removeGeoObjects(previous_position)
+        landmark.removeLocations(previous_position)
       end
 
       # set the agent current position
-      @agent.current_position = @geo_object
+      @agent.current_position = @location
 
       # track the new position
       # TODO: add a progressive counter
-      @agent.current_track.addGeoObjects(@geo_object)
+      @agent.current_track.addLocations(@location)
 
       # attach the new position to the landmark
-      CloudTm::Landmark.add_geo_object(@geo_object)
+      CloudTm::TrackableLandmark.add_location(@location)
     end
 
     # the perception content.
@@ -83,13 +83,13 @@ module Actions
       
       p.data = {
         :geo_agent => @agent.id,
-        :geo_object => {
-          :id => @geo_object.id,
-          :latitude => @geo_object.latitude.to_s,
-          :longitude => @geo_object.longitude.to_s,
+        :location => {
+          :id => @location.id,
+          :latitude => @location.latitude.to_s,
+          :longitude => @location.longitude.to_s,
           :data => {
-            :body => @geo_object.body,
-            :type => @geo_object.type
+            :body => @location.body,
+            :type => @location.type
           }
         }
       }

@@ -15,7 +15,7 @@
 
 <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyCXQO2oj9QzIl0RGXzDCO-JTa2j--FbVNg&sensor=true"></script>
 <script type="text/javascript">  
-  var _geoObjects = null;
+  var _locations = null;
   
   $(document).ready(function() {
     $("#refresh-button").button();
@@ -23,8 +23,8 @@
 
     initializeMap();
     
-    addGeoObjects(<%= @geo_objects.html_safe %>);
-    addGeoObjects(<%= @landmarks_objects.html_safe %>);
+    addLocations(<%= @locations.html_safe %>);
+    addLocations(<%= @landmarks_objects.html_safe %>);
     addEdges(<%= @edges.html_safe %>);
   });
 </script>

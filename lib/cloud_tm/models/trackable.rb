@@ -30,6 +30,7 @@
 module CloudTm
   class Trackable
     include CloudTm::Model
+    include CloudTm::AgentBase
 
     def attributes_to_hash
       { 
@@ -39,8 +40,5 @@ module CloudTm
       }
     end
 
-    class << self
-    end
-    
   end
 end 

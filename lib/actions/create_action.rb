@@ -41,7 +41,7 @@ module Actions
     # [OPTIONAL]  Add your initialization code here.
     def initialize params
       super
-      @geo_object = nil
+      @location = nil
       @clients << Madmass.current_agent.id
     end
 
@@ -54,7 +54,7 @@ module Actions
       attrs.merge!(data)
       attrs[:latitude] = BigDecimal.new(attrs[:latitude])
       attrs[:longitude] = BigDecimal.new(attrs[:longitude])
-      @geo_object = CloudTm::GeoObject.create(attrs)
+      @location = CloudTm::Location.create(attrs)
       Rails.logger.debug "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
       Rails.logger.debug "CREATE AGENT ACTION"
       Rails.logger.debug "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
@@ -66,7 +66,7 @@ module Actions
     def build_result
       p = Madmass::Perception::Percept.new(self)
       #p.add_headers({:clients => [Madmass.current_agent.id]}) #who must receive the percept
-      p.data =  {:geo_object => @geo_object.getExternalId}
+      p.data =  {:location => @location.getExternalId}
       Madmass.current_perception << p
     end
 

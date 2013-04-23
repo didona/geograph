@@ -35,8 +35,8 @@ module CloudTm
     def attributes_to_hash
       {
         :id => getExternalId,
-        :latitude => latitude.to_s,
-        :longitude => longitude.to_s,
+        :latitude => location.latitude.to_s,
+        :longitude => location.longitude.to_s,
         :likes => likes,
         :text => text,
         :data => {:type => type, :body => body}
@@ -50,10 +50,10 @@ module CloudTm
       
       def all
         posts = []
-        CloudTm::Landmark.all.each do |landmark|
-          posts += landmark.getGeoObjects.to_a.select{|geo| geo.type == 'Post'}
+        CloudTm::PostLandmark.all.each do |landmark|
+          posts += landmark.getLocations.to_a
         end
-        Madmass.logger.debug "GeoObjects are #{posts.to_yaml}"
+        Madmass.logger.debug "Locations are #{posts.to_yaml}"
         return posts
       end
 

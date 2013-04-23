@@ -42,9 +42,9 @@ class Actions::ReadPostAction < Madmass::Action::Action
     lat = BigDecimal.new(@parameters[:latitude])
     lon  = BigDecimal.new(@parameters[:longitude])
     @posts_read = []
-    landmark = CloudTm::Landmark.find_by_coordinates(lat, lon)
+    landmark = CloudTm::PostLandmark.find_by_coordinates(lat, lon)
     if landmark
-      @posts_read = landmark.geoObjects.select{|obj| obj.type == 'Post'}
+      @posts_read = landmark.locations
     end
   end
 

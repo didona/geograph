@@ -28,34 +28,25 @@
 ###############################################################################
 
 module CloudTm
-  class Agent
-    include Madmass::Agent::Executor
-    include CloudTm::Model
-    include CloudTm::AgentBase
-
-    def attributes_to_hash
-      { 
-        :id => getExternalId,
-        :status => status,
-        :user => user
-      }
+  module AgentBase
+    def self.included(base)
+      base.extend(ClassMethods)
     end
 
-    def destroy
-      domain_root.removeAgents(self)
-    end
+    module ClassMethods
 
-    class << self
+      def create attrs = {}, &block
+        instance = super
+        domain_root.add_agents instance
+        instance
+      end
 
-      def factory attrs = {}
-        agent_type = attrs.delete(:type)
-        agent_klass = case agent_type
-        when 'trackable'
-          CloudTm::Trackable
-        else
-          CloudTm::Agent
-        end
-        agent_klass.create attrs
+      def all
+        domain_root.getAgents
+      end
+
+      def find_by_user(user)
+        domain_root.getAgentsByUser(user)
       end
 
     end

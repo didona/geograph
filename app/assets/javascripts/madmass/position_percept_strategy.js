@@ -1,4 +1,4 @@
-$perceptStrategy("geo_object" , function(percepts){
+$perceptStrategy("location" , function(percepts){
   onPercept(percepts);
 });
 

@@ -28,8 +28,11 @@
 ###############################################################################
 
 module CloudTm
-  class Landmark
-    include CloudTm::Model
+  module LandmarkBase
+    def self.included(base)
+      base.send(:include, CloudTm::Model)
+      base.extend(ClassMethods)
+    end    
 
     # Grid cell size in meters
     CELL_SIZE = BigDecimal.new("5000")
@@ -52,15 +55,15 @@ module CloudTm
         :x => x,
         :y => y,
         :cell => cell,
-        :data => {:type => type, :body => body}
+        :data => { :type => type, :body => body }
       }
     end
 
     def destroy
       domain_root.removeLandmarks(self)
     end
-    
-    class << self
+
+    module ClassMethods
 
       def locality_key
         'landmark'
@@ -72,16 +75,22 @@ module CloudTm
       end
 
       # Returns the landmark associated to the cell. 
-      # The cell is an hash like: {x: 23 , y: 12]
+      # The cell is an hash like: { x: 23 , y: 12 }
       def find_by_coordinates(latitude, longitude)
         cell = coordinates_to_cell(latitude, longitude)
-        find_by_cell(cell)
+        find_by_cell(type, cell)
       end
 
       # Returns the landmark associated to the cell. 
       # The cell is an hash like: {x: 23 , y: 12]
       def find_by_cell(cell)
-        domain_root.getLandmarksByCell(cell_index(cell))
+        if self == CloudTm::PostLandmark
+          domain_root.getPostLandmarksByCell(cell_index(cell))
+        elsif self == CloudTm::VenueLandmark
+          domain_root.getVenueLandmarksByCell(cell_index(cell))
+        elsif self == CloudTm::TrackableLandmark
+          domain_root.getTrackableLandmarksByCell(cell_index(cell))
+        end
       end
 
       def cell_index(cell)
@@ -113,15 +122,14 @@ module CloudTm
         ( ( BigDecimal.new(cell[:y]) + BigDecimal.new("0.5") ) * CELL_SIZE) / LATITUDE_SIZE
       end
 
-      def add_geo_object(geo_object)
-        Rails.logger.warn "ADD GEO OBJECT"
-        cell = coordinates_to_cell(geo_object.latitude, geo_object.longitude)
-        landmark = CloudTm::Landmark.find_by_cell(cell)
+      def get_landmark(location)
+        cell = coordinates_to_cell(location.latitude, location.longitude)
+        landmark = find_by_cell(cell)
         unless landmark
           cell_index = cell_index(cell)
           lat = latitude(cell)
           lon = longitude(cell)
-          landmark = CloudTm::Landmark.create(
+          landmark = CloudTm::Landmark.create(type,
             type: 'Landmark', 
             body: "cell: #{cell_index} - lat: #{lat} - lon: #{lon}",
             x: cell[:x], 
@@ -133,23 +141,42 @@ module CloudTm
             locality_value: cell_index
           )
         end
+      end
 
-        # a geo object can be associated only to 1 landmark, so we don't need to remove 
+      def add_location(location)
+        Rails.logger.debug "ADD LOCATION #{location.latitude},#{location.longitude} TO LANDMARK OF TYPE #{self}"
+        landmark = get_landmark(location)
+        # a location can be associated only to 1 landmark, so we don't need to remove 
         # it from the previous landmark?
-        if geo_object.landmark != landmark  
-          landmark.addGeoObjects(geo_object)
+        if location.landmark != landmark
+          landmark.addLocations location
         end
       end
 
       def create attrs = {}, &block
         instance = super
-        domain_root.addLandmarks instance
-        instance
+        if self == CloudTm::PostLandmark
+          domain_root.addPostLandmarks instance
+          instance
+        elsif self == CloudTm::VenueLandmark
+          domain_root.addVenueLandmarks instance
+          instance
+        elsif self == CloudTm::TrackableLandmark
+          domain_root.addTrackableLandmarks instance
+          instance
+        else
+          nil
+        end
       end
 
-
       def all
-        domain_root.getLandmarks.to_a
+        if self == CloudTm::PostLandmark
+          domain_root.getPostLandmarks.to_a 
+        elsif self == CloudTm::VenueLandmark
+          domain_root.getVenueLandmarks.to_a
+        elsif self == CloudTm::TrackableLandmark
+          domain_root.getTrackableLandmarks.to_a
+        end
       end
 
     end

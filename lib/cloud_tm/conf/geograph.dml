@@ -28,14 +28,14 @@ class Track {
   Date timestamp;
 }
 
-class GeoObject {
+class Location {
   String type;
   String body;
   Decimal latitude;
   Decimal longitude;
 }
 
-class Post  extends GeoObject{
+class Post {
   Integer likes;
   String text;
   //String user;
@@ -51,29 +51,24 @@ class Landmark {
   String cell;
 }
 
+class PostLandmark extends Landmark { }
+class VenueLandmark extends Landmark { }
+class TrackableLandmark extends Landmark { }
+
+class Venue {
+  String name;
+  Integer likes;
+}
+
+class Comment {
+  String comment;
+}
+
 class Root { // This is the root domain object
     boolean loaded;         // auxiliary slot for the bootstrap sequence
     Integer numAgentIds;    // for the generation of Agent ids
     Integer numPropertiesIds; // FIXME is this the right way to do it?
 }
-
-/*
-class Place  extends GeoObject{
-  String description;
-  String user;
-  Integer checkins;
-}
-
-class Comment {
-  String text;
-}
-
-class Properties {
-  String edge_processor_strategy; // job or action
-  Integer distance;
-}
-*/
-
 
 
 // RELATIONS
@@ -92,53 +87,73 @@ relation RootHasAgents {
     }
 }
 
-/*
-
-relation RootHasProperties {
-   Root playsRole;
-   Properties playsRole properties { multiplicity 0..1; }
-}
-*/
-
 relation AgentHasPosts { //add posts must use closed simulation to avoid conflicts
     Agent playsRole agent;
     Post playsRole posts { multiplicity *; }
 }
 
-/*
-relation AgentWroteComment { //add posts must use closed simulation to avoid conflicts
-    Agent playsRole agent;
-    Comment playsRole comments { multiplicity *; }
+relation AgentVisitedManyVenues {
+  Agent playsRole visitingAgent;
+  Venue playsRole visitedVenues { multiplicity *; }
 }
 
-relation PostHasComment { //add posts must use closed simulation to avoid conflicts
+relation AgentOwnsManyVenues {
+  Agent playsRole ownerAgent;
+  Venue playsRole ownedVenues { multiplicity *; }
+}
+
+relation AgentIsCurrentlyAtVenue {
+  Agent playsRole agent;
+  Venue playsRole currentVenue;
+}
+
+relation VenueHasManyComments {
+  Venue playsRole venue;
+  Comment playsRole comments { multiplicity *; }
+}
+
+relation VenueHasALocation {
+  Venue playsRole venue;
+  Location playsRole location;
+}
+
+relation PostHasComments {
+  Post playsRole post;
+  Comment playsRole comments { multiplicity *; }
+}
+
+relation PostHasLocation {
     Post playsRole post;
-    Comment playsRole comments { multiplicity *; }
+    Location playsRole location;
 }
 
-relation PlaceHasPost { //add posts must use closed simulation to avoid conflicts
-    Place playsRole place;
-    Post playsRole posts { multiplicity *; }
-}
-
-relation GeoObjectHasGeoObject {
-  GeoObject playsRole neighbours { multiplicity *; }
-  GeoObject playsRole; // this is IMPORTANT!!! :-)
-}
-
-*/
-
-relation RootHasLandmarks {
+relation RootHasPostLandmarks {
   Root playsRole;
-  Landmark playsRole landmarks { 
-    multiplicity *; 
+  Landmark playsRole postLandmarks {
+    multiplicity *;
     indexed by cell;
   }
 }
 
-relation LandmarkHasGeoObjects {
+relation RootHasTrackableLandmarks {
+  Root playsRole;
+  Landmark playsRole trackableLandmarks {
+    multiplicity *;
+    indexed by cell;
+  }
+}
+
+relation RootHasVenueLandmarks {
+  Root playsRole;
+  Landmark playsRole venueLandmarks {
+    multiplicity *;
+    indexed by cell;
+  }
+}
+
+relation LandmarkHasLocations {
   Landmark playsRole landmark;
-  GeoObject playsRole geoObjects { multiplicity *; }
+  Location playsRole locations { multiplicity *; }
 }
 
 relation TrackableHasTracks {
@@ -153,10 +168,10 @@ relation TrackableHasCurrentTrack {
 
 relation TrackableHasCurrentPosition {
   Trackable playsRole;
-  GeoObject playsRole currentPosition;
+  Location playsRole currentPosition;
 }
 
-relation TrackHasGeoObjects {
+relation TrackHasLocations {
   Track playsRole track;
-  GeoObject playsRole geoObjects { multiplicity *; }
+  Location playsRole locations { multiplicity *; }
 }

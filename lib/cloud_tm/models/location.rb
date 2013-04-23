@@ -29,7 +29,7 @@
 
 
 module CloudTm
-  class GeoObject
+  class Location
     include CloudTm::Model
 
     def attributes_to_hash
@@ -60,12 +60,18 @@ module CloudTm
       #end
 
       def all
-        geo_objects = []
-        CloudTm::Landmark.all.each do |landmark|
-          geo_objects += landmark.getGeoObjects.to_a
+        locations = []
+        CloudTm::PostLandmark.all.each do |landmark|
+          locations += landmark.getLocations.to_a
         end
-        Madmass.logger.debug "GeoObjects are #{geo_objects.to_yaml}"
-        return geo_objects
+        CloudTm::VenueLandmark.all.each do |landmark|
+          locations += landmark.getLocations.to_a
+        end
+        CloudTm::TrackableLandmark.all.each do |landmark|
+          locations += landmark.getLocations.to_a
+        end
+        Madmass.logger.debug "Locations are #{locations.to_yaml}"
+        return locations
       end
 
     end

@@ -49,19 +49,19 @@ module Actions
     # the action effects.
     def execute
       @edges = []
-      geo_objects = CloudTm::GeoObject.all
-      geo_objects.each_with_index do |geo_object, index|
-        geo_object.compute_neighbours "job" #FIXME (pass index)
-        neighbours = geo_object.edges_for_percept "job"
+      locations = CloudTm::Location.all
+      locations.each_with_index do |location, index|
+        location.compute_neighbours "job" #FIXME (pass index)
+        neighbours = location.edges_for_percept "job"
         @edges += neighbours if neighbours
         # remove previous edges
-        #geo_object1.remove_edges
+        #location1.remove_edges
         # connect edges
-        #geo_objects.to_a[(index+1)..-1].each do |geo_object2|
-        #  if HaversineDistance.calculate(geo_object1, geo_object2) <= 1000 #FIXME@job.distance
-        #    geo_object1.addIncoming(geo_object2)
-        #    geo_object2.addIncoming(geo_object1)
-        #    @edges << [geo_object1, geo_object2]
+        #locations.to_a[(index+1)..-1].each do |location2|
+        #  if HaversineDistance.calculate(location1, location2) <= 1000 #FIXME@job.distance
+        #    location1.addIncoming(location2)
+        #    location2.addIncoming(location1)
+        #    @edges << [location1, location2]
         #  end
         #end
       end

@@ -129,7 +129,7 @@ module CloudTm
           cell_index = cell_index(cell)
           lat = latitude(cell)
           lon = longitude(cell)
-          landmark = self.create(
+          landmark = create(
             type: 'Landmark', 
             body: "cell: #{cell_index} - lat: #{lat} - lon: #{lon}",
             x: cell[:x], 
@@ -141,6 +141,7 @@ module CloudTm
             locality_value: cell_index
           )
         end
+        landmark
       end
 
       def add_location(location)

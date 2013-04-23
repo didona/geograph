@@ -55,14 +55,18 @@ module Actions
         :body => @parameters[:data][:body],
         :type => @parameters[:data][:type],
         :locality_key => CloudTm::TrackableLandmark.locality_key,
-        :locality_value => CloudTm::TrackableLandmark.locality_value(@parameters[:latitude], @parameters[:longitude])
+        :locality_value => CloudTm::TrackableLandmark.locality_value(@parameters[:latitude], @parameters[:longitude]),
       )
+
+      @location.landmark = CloudTm::TrackableLandmark.get_landmark(@location)
 
       # remove the previous position from the landmark
       previous_position = @agent.current_position
       if previous_position
         landmark = previous_position.landmark
+        Madmass.logger.debug "POSITION: #{previous_position}, LANDMARK: #{landmark}"
         previous_position.type = 'Track'
+        Madmass.logger.debug "END POSITION"
         landmark.removeLocations(previous_position)
       end
 

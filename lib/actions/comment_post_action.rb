@@ -28,37 +28,39 @@
 ###############################################################################
 
 
-class Actions::ReadPostAction < Madmass::Action::Action
+class Actions::CommentPostAction < Madmass::Action::Action
   action_params :latitude, :longitude, :user
 
   def initialize params
     super
-    @channels << :all
   end
 
-
-  # the action effects.
   def execute
     lat = BigDecimal.new(@parameters[:latitude])
     lon  = BigDecimal.new(@parameters[:longitude])
-    @posts_read = []
     landmark = CloudTm::PostLandmark.find_by_coordinates(lat, lon)
-    if landmark
-      @posts_read = landmark.locations.map{|loc| loc.post}
+    if landmark and landmark.locations and landmark.locations.size > 0
+      a = landmark.locations.to_a
+      @post = a[rand(0..(a.size - 1))].post
+      @new_comment = CloudTm::Comment.create(
+        :comment => "This is comment #{@post.comments.size + 1} to post #{@post.id} '#{@post.text ? @post.text[0..10] : ''}'"
+      )
+      @post.addComments @new_comment
+      Madmass.logger.debug "==[#{self}] Commented post #{@post.id} with '#{@new_comment.comment}'"
+    elsif not landmark
+      Madmass.logger.debug "==[#{self}] No landmark here (#{lat}, #{lon})"
+    elsif landmark.locations.nil? or landmark.locations.empty?
+      Madmass.logger.debug "==[#{self}] No post here (#{lat}, #{lon})"
     end
   end
 
-  # the perception content.
   def build_result
     p = Madmass::Perception::Percept.new(self)
-    p.data = {
-      :posts_read => []
-    }
-    @posts_read.each do |pread|
-      p.data[:posts_read] << {
-        :id => pread.getExternalId,
-        :latitude => pread.location.latitude.to_s,
-        :longitude => pread.location.longitude.to_s
+   
+    if @post and @new_comment 
+      p.data = {
+        :post_id => @post.id,
+        :comment => @new_comment.comment
       }
     end
 

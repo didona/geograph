@@ -41,7 +41,8 @@ class Actions::PostAction < Madmass::Action::Action
   def execute
     @geo_post = CloudTm::Post.create(
       :locality_key => CloudTm::PostLandmark.locality_key,
-      :locality_value => CloudTm::PostLandmark.locality_value(@parameters[:latitude], @parameters[:longitude])
+      :locality_value => CloudTm::PostLandmark.locality_value(@parameters[:latitude], @parameters[:longitude]),
+      :text => "This is the text of a post"
     )
     @geo_post.location = CloudTm::Location.create(
       :body => @parameters[:data][:body],

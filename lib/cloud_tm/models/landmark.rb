@@ -114,7 +114,7 @@ module CloudTm
       end
 
       def add_geo_object(geo_object)
-        Rails.logger.warn "ADD GEO OBJECT"
+        Rails.logger.debug "ADD GEO OBJECT"
         cell = coordinates_to_cell(geo_object.latitude, geo_object.longitude)
         landmark = CloudTm::Landmark.find_by_cell(cell)
         unless landmark

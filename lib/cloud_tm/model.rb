@@ -58,9 +58,9 @@ module CloudTm
       end
 
       def create attrs = {}, &block
-        Rails.logger.warn "CREATE FOR DML MODEL: #{attrs.inspect}"
+        Rails.logger.debug "CREATE FOR DML MODEL: #{attrs.inspect}"
         if(attrs[:locality_key] and attrs[:locality_value])
-          Rails.logger.error "CloudTm::Model::create: with locality hints: key: #{attrs[:locality_key]} - value: #{attrs[:locality_value]}"
+          Rails.logger.debug "CloudTm::Model::create: with locality hints: key: #{attrs[:locality_key]} - value: #{attrs[:locality_value]}"
           instance = new new_locality_hint(attrs.delete(:locality_key), attrs.delete(:locality_value))
         else
           instance = new

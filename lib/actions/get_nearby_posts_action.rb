@@ -27,6 +27,7 @@
 ###############################################################################
 ###############################################################################
 
+require 'haversine_distance.rb'
 
 class Actions::GetNearbyPostsAction < Madmass::Action::Action
   action_params :latitude, :longitude, :user, :max_dist, :max_count

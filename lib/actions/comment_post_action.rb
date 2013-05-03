@@ -29,7 +29,7 @@
 
 
 class Actions::CommentPostAction < Madmass::Action::Action
-  action_params :latitude, :longitude, :user
+  action_params :post_id, :latitude, :longitude, :user
 
   def initialize params
     super
@@ -40,8 +40,15 @@ class Actions::CommentPostAction < Madmass::Action::Action
     lon  = BigDecimal.new(@parameters[:longitude])
     landmark = CloudTm::PostLandmark.find_by_coordinates(lat, lon)
     if landmark and landmark.locations and landmark.locations.size > 0
-      a = landmark.locations.to_a
-      @post = a[rand(0..(a.size - 1))].post
+      locs = landmark.locations.to_a
+      @post = nil
+      locs.each do |loc|
+        if loc.post.id == @parameters[:post_id]
+          @post = loc.post
+          break
+        end
+      end
+      ## HERE FIXME post is nil!!
       @new_comment = CloudTm::Comment.create(
         :comment => "This is comment #{@post.comments.size + 1} to post #{@post.id} '#{@post.text ? @post.text[0..10] : ''}'"
       )

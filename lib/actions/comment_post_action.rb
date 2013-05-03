@@ -43,17 +43,19 @@ class Actions::CommentPostAction < Madmass::Action::Action
       locs = landmark.locations.to_a
       @post = nil
       locs.each do |loc|
+        Madmass.logger.debug "==[#{self}] loc #{loc} ; #{loc.inspect}"
         if loc.post.id == @parameters[:post_id]
           @post = loc.post
           break
         end
       end
       ## HERE FIXME post is nil!!
-      @new_comment = CloudTm::Comment.create(
-        :comment => "This is comment #{@post.comments.size + 1} to post #{@post.id} '#{@post.text ? @post.text[0..10] : ''}'"
-      )
-      @post.addComments @new_comment
-      Madmass.logger.debug "==[#{self}] Commented post #{@post.id} with '#{@new_comment.comment}'"
+#      @new_comment = CloudTm::Comment.create(
+#        :comment => "This is comment #{@post.comments.size + 1} to post #{@post.id} '#{@post.text ? @post.text[0..10] : ''}'"
+#      )
+#      @post.addComments @new_comment
+#      Madmass.logger.debug "==[#{self}] Commented post #{@post.id} with '#{@new_comment.comment}'"
+      Madmass.logger.debug "==[#{self}] is there any post? #{@post}"
     elsif not landmark
       Madmass.logger.debug "==[#{self}] No landmark here (#{lat}, #{lon})"
     elsif landmark.locations.nil? or landmark.locations.empty?

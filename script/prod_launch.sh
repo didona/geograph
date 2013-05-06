@@ -43,6 +43,5 @@ torquebox deploy --context-path=/farm --env=production
 
 cd ../wpm
 
-/run_log_service.sh &> logservice.log &
 ./run_cons_prod.sh
 

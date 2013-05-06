@@ -36,10 +36,13 @@ class Actions::CommentPostAction < Madmass::Action::Action
   end
 
   def execute
+    Madmass.logger.debug "==[#{self}] ---"
     lat = BigDecimal.new(@parameters[:latitude])
     lon  = BigDecimal.new(@parameters[:longitude])
+    Madmass.logger.debug "==[#{self}] looking for landmark near #{lat},#{long}"
     landmark = CloudTm::PostLandmark.find_by_coordinates(lat, lon)
     if landmark and landmark.locations and landmark.locations.size > 0
+      Madmass.logger.debug "==[#{self}] landmark #{landmark}"
       locs = landmark.locations.to_a
       @post = nil
       locs.each do |loc|

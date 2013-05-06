@@ -39,6 +39,7 @@ class Actions::GetNearbyPostsAction < Madmass::Action::Action
 
   # the action effects.
   def execute
+    Madmass.logger.debug "==[#{self}] ---"
     lat = BigDecimal.new(@parameters[:latitude])
     lon  = BigDecimal.new(@parameters[:longitude])
     max_dist = @parameters[:max_dist]
